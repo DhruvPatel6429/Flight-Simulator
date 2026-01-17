@@ -4,10 +4,11 @@ export const HeapVisualization = ({ flights }) => {
   const sortedFlights = [...flights].sort((a, b) => a.departure_time.localeCompare(b.departure_time));
   
   const getNodePosition = (index, level, totalAtLevel) => {
-    const levelWidth = 100;
-    const nodeWidth = levelWidth / (totalAtLevel + 1);
-    const position = (index % totalAtLevel + 1) * nodeWidth;
-    return { x: position, y: level * 100 + 50 };
+    const svgWidth = 800;
+    const nodeSpacing = svgWidth / (totalAtLevel + 1);
+    const x = (index % totalAtLevel + 1) * nodeSpacing;
+    const y = level * 120 + 60;
+    return { x, y };
   };
   
   const renderNode = (flight, index, level) => {
@@ -17,34 +18,49 @@ export const HeapVisualization = ({ flights }) => {
     const indexInLevel = index - (Math.pow(2, level) - 1);
     const pos = getNodePosition(indexInLevel, level, totalAtLevel);
     
+    const leftChildIndex = index * 2 + 1;
+    const rightChildIndex = index * 2 + 2;
+    
     return (
       <g key={index}>
         {/* Lines to children */}
-        {index * 2 + 1 < sortedFlights.length && (
-          <line
-            x1={`${pos.x}%`}
-            y1={pos.y}
-            x2={`${getNodePosition((index * 2 + 1) - (Math.pow(2, level + 1) - 1), level + 1, Math.pow(2, level + 1)).x}%`}
-            y2={pos.y + 100}
-            stroke="#475569"
-            strokeWidth="2"
-          />
-        )}
-        {index * 2 + 2 < sortedFlights.length && (
-          <line
-            x1={`${pos.x}%`}
-            y1={pos.y}
-            x2={`${getNodePosition((index * 2 + 2) - (Math.pow(2, level + 1) - 1), level + 1, Math.pow(2, level + 1)).x}%`}
-            y2={pos.y + 100}
-            stroke="#475569"
-            strokeWidth="2"
-          />
-        )}
+        {leftChildIndex < sortedFlights.length && (() => {
+          const leftChildLevel = level + 1;
+          const leftTotalAtLevel = Math.pow(2, leftChildLevel);
+          const leftIndexInLevel = leftChildIndex - (Math.pow(2, leftChildLevel) - 1);
+          const leftPos = getNodePosition(leftIndexInLevel, leftChildLevel, leftTotalAtLevel);
+          return (
+            <line
+              x1={pos.x}
+              y1={pos.y}
+              x2={leftPos.x}
+              y2={leftPos.y}
+              stroke="#475569"
+              strokeWidth="2"
+            />
+          );
+        })()}
+        {rightChildIndex < sortedFlights.length && (() => {
+          const rightChildLevel = level + 1;
+          const rightTotalAtLevel = Math.pow(2, rightChildLevel);
+          const rightIndexInLevel = rightChildIndex - (Math.pow(2, rightChildLevel) - 1);
+          const rightPos = getNodePosition(rightIndexInLevel, rightChildLevel, rightTotalAtLevel);
+          return (
+            <line
+              x1={pos.x}
+              y1={pos.y}
+              x2={rightPos.x}
+              y2={rightPos.y}
+              stroke="#475569"
+              strokeWidth="2"
+            />
+          );
+        })()}
         
         {/* Node */}
-        <g transform={`translate(${pos.x}%, ${pos.y})`}>
+        <g transform={`translate(${pos.x}, ${pos.y})`}>
           <circle
-            r="40"
+            r="35"
             fill="#8B5CF6"
             stroke="#7C3AED"
             strokeWidth="3"
@@ -52,9 +68,9 @@ export const HeapVisualization = ({ flights }) => {
           />
           <text
             textAnchor="middle"
-            dy="-10"
+            dy="-8"
             fill="#F8FAFC"
-            fontSize="12"
+            fontSize="14"
             fontFamily="JetBrains Mono, monospace"
             fontWeight="bold"
           >
@@ -62,9 +78,9 @@ export const HeapVisualization = ({ flights }) => {
           </text>
           <text
             textAnchor="middle"
-            dy="10"
+            dy="12"
             fill="#E9D5FF"
-            fontSize="10"
+            fontSize="11"
             fontFamily="JetBrains Mono, monospace"
           >
             {flight.departure_time}
