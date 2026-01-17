@@ -257,30 +257,33 @@ export const Dashboard = () => {
           </div>
         )}
 
-        {/* Controls */}
-        <div className="flex flex-wrap gap-3 mb-6">
-          <Button onClick={initializeData} disabled={loading} className="bg-dsa-graph hover:bg-dsa-graph/80" data-testid="btn-initialize-data">
-            Initialize Sample Data
-          </Button>
-          <Button onClick={resetSystem} disabled={loading} variant="destructive" data-testid="btn-reset-system">
-            Reset System
-          </Button>
-          <Button onClick={() => setShowDSAInfo(!showDSAInfo)} variant="outline" className="border-aviation-border" data-testid="btn-toggle-dsa-info">
-            {showDSAInfo ? 'Hide' : 'Show'} DSA Explanations
-          </Button>
-          <div className="flex items-center gap-2 ml-auto">
-            <Label className="text-aviation-text-secondary text-sm">Animation Speed:</Label>
-            <select 
-              value={animationSpeed} 
-              onChange={(e) => setAnimationSpeed(e.target.value)}
-              className="bg-aviation-surface border border-aviation-border text-aviation-text-primary rounded px-3 py-2 text-sm"
-              data-testid="select-animation-speed"
-            >
-              <option value="slow">Slow</option>
-              <option value="normal">Normal</option>
-              <option value="fast">Fast</option>
-            </select>
-          </div>
+        {/* Controls Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+          {/* System Controls */}
+          <Card className="lg:col-span-3 bg-aviation-surface border-aviation-border p-4">
+            <div className="flex flex-wrap gap-3 items-center">
+              <Button onClick={initializeData} disabled={loading} className="bg-dsa-graph hover:bg-dsa-graph/80" data-testid="btn-initialize-data">
+                📊 Initialize Sample Data
+              </Button>
+              <Button onClick={resetSystem} disabled={loading} variant="destructive" data-testid="btn-reset-system">
+                🔄 Reset System
+              </Button>
+              <div className="h-8 w-px bg-aviation-border"></div>
+              <div className="text-xs text-aviation-text-secondary font-mono">
+                Click airports to explore • Use BFS/DFS to traverse • View step-by-step animations
+              </div>
+            </div>
+          </Card>
+
+          {/* Operation Control Panel */}
+          <OperationControlPanel 
+            animationSpeed={animationSpeed}
+            onSpeedChange={setAnimationSpeed}
+            showDSAInfo={showDSAInfo}
+            onToggleDSAInfo={() => setShowDSAInfo(!showDSAInfo)}
+            stepMode={stepMode}
+            onToggleStepMode={() => setStepMode(!stepMode)}
+          />
         </div>
 
         {/* Main Tabs */}
