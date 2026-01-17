@@ -689,7 +689,12 @@ export const Dashboard = () => {
               )}
 
               <div id="heap-section" className="bg-aviation-bg border border-aviation-border rounded-lg p-6">
-                <HeapVisualization flights={flights} />
+                <EnhancedHeapVisualization 
+                  flights={flights}
+                  animationSpeed={animationSpeed}
+                  showSteps={showDSAInfo}
+                  showArrayRepresentation={true}
+                />
               </div>
 
               {analytics?.upcoming_flight && (
