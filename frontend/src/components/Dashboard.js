@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { EnhancedGraphVisualization } from './EnhancedGraphVisualization';
 import { EnhancedHashTableVisualization } from './EnhancedHashTableVisualization';
@@ -6,6 +6,10 @@ import { EnhancedQueueVisualization } from './EnhancedQueueVisualization';
 import { EnhancedStackVisualization } from './EnhancedStackVisualization';
 import { EnhancedHeapVisualization } from './EnhancedHeapVisualization';
 import { OperationControlPanel } from './OperationControlPanel';
+import { BulkOperationsDialog } from './BulkOperationsDialog';
+import { ImportExportDialog } from './ImportExportDialog';
+import { AnalyticsCharts } from './AnalyticsCharts';
+import { PathfindingVisualizer } from './PathfindingVisualizer';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
