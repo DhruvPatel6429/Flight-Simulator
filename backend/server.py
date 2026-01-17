@@ -437,6 +437,291 @@ async def reset_system():
     await db.cancellations.delete_many({})
     return {"message": "System reset successfully"}
 
+# Bulk Operations APIs
+@api_router.post("/passengers/bulk")
+async def bulk_add_passengers(passengers_data: List[PassengerCreate]):
+    """Bulk add multiple passengers at once"""
+    added_passengers = []
+    errors = []
+    
+    for idx, passenger_data in enumerate(passengers_data):
+        try:
+            flight = await db.flights.find_one({"flight_id": passenger_data.flight_id}, {"_id": 0})
+            if not flight:
+                errors.append({"index": idx, "error": f"Flight {passenger_data.flight_id} not found"})
+                continue
+            
+            if flight['booked_seats'] >= flight['total_seats']:
+                errors.append({"index": idx, "error": f"Flight {passenger_data.flight_id} is full"})
+                continue
+            
+            ticket_id = f"TKT{uuid.uuid4().hex[:8].upper()}"
+            passenger_obj = Passenger(ticket_id=ticket_id, **passenger_data.model_dump())
+            doc = passenger_obj.model_dump()
+            
+            await db.passengers.insert_one(doc)
+            await db.flights.update_one(
+                {"flight_id": passenger_data.flight_id},
+                {"$inc": {"booked_seats": 1}}
+            )
+            added_passengers.append(passenger_obj)
+        except Exception as e:
+            errors.append({"index": idx, "error": str(e)})
+    
+    return {
+        "message": f"Added {len(added_passengers)} passengers",
+        "added": len(added_passengers),
+        "failed": len(errors),
+        "passengers": added_passengers,
+        "errors": errors
+    }
+
+@api_router.post("/boarding-queue/bulk-enqueue")
+async def bulk_enqueue(flight_id: str, ticket_ids: List[str]):
+    """Bulk enqueue multiple passengers"""
+    enqueued = []
+    errors = []
+    
+    for ticket_id in ticket_ids:
+        try:
+            passenger = await db.passengers.find_one({"ticket_id": ticket_id}, {"_id": 0})
+            if not passenger:
+                errors.append({"ticket_id": ticket_id, "error": "Passenger not found"})
+                continue
+            
+            if passenger['flight_id'] != flight_id:
+                errors.append({"ticket_id": ticket_id, "error": "Passenger flight mismatch"})
+                continue
+            
+            if passenger['status'] == "boarded":
+                errors.append({"ticket_id": ticket_id, "error": "Passenger already boarded"})
+                continue
+            
+            existing = await db.boarding_queue.find_one({"ticket_id": ticket_id, "flight_id": flight_id})
+            if existing:
+                errors.append({"ticket_id": ticket_id, "error": "Already in queue"})
+                continue
+            
+            queue = await db.boarding_queue.find({"flight_id": flight_id}, {"_id": 0}).to_list(1000)
+            position = len(queue)
+            
+            queue_item = {
+                "ticket_id": ticket_id,
+                "passenger_name": passenger['name'],
+                "flight_id": flight_id,
+                "position": position
+            }
+            await db.boarding_queue.insert_one(queue_item)
+            enqueued.append({"ticket_id": ticket_id, "position": position})
+        except Exception as e:
+            errors.append({"ticket_id": ticket_id, "error": str(e)})
+    
+    return {
+        "message": f"Enqueued {len(enqueued)} passengers",
+        "enqueued": len(enqueued),
+        "failed": len(errors),
+        "passengers": enqueued,
+        "errors": errors
+    }
+
+# Export/Import APIs
+@api_router.get("/export/all-data")
+async def export_all_data():
+    """Export all system data as JSON"""
+    airports = await db.airports.find({}, {"_id": 0}).to_list(1000)
+    flights = await db.flights.find({}, {"_id": 0}).to_list(1000)
+    passengers = await db.passengers.find({}, {"_id": 0}).to_list(1000)
+    boarding_queues = await db.boarding_queue.find({}, {"_id": 0}).to_list(1000)
+    cancellations = await db.cancellations.find({}, {"_id": 0}).to_list(1000)
+    
+    return {
+        "airports": airports,
+        "flights": flights,
+        "passengers": passengers,
+        "boarding_queues": boarding_queues,
+        "cancellations": cancellations,
+        "exported_at": datetime.now(timezone.utc).isoformat()
+    }
+
+@api_router.post("/import/data")
+async def import_data(data: Dict):
+    """Import system data from JSON"""
+    try:
+        if 'airports' in data and data['airports']:
+            await db.airports.insert_many(data['airports'])
+        if 'flights' in data and data['flights']:
+            await db.flights.insert_many(data['flights'])
+        if 'passengers' in data and data['passengers']:
+            await db.passengers.insert_many(data['passengers'])
+        if 'boarding_queues' in data and data['boarding_queues']:
+            await db.boarding_queue.insert_many(data['boarding_queues'])
+        if 'cancellations' in data and data['cancellations']:
+            await db.cancellations.insert_many(data['cancellations'])
+        
+        return {"message": "Data imported successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Import failed: {str(e)}")
+
+# Enhanced Analytics APIs
+@api_router.get("/analytics/detailed")
+async def get_detailed_analytics():
+    """Get detailed analytics with charts data"""
+    airports = await db.airports.find({}, {"_id": 0}).to_list(1000)
+    flights = await db.flights.find({}, {"_id": 0}).to_list(1000)
+    passengers = await db.passengers.find({}, {"_id": 0}).to_list(1000)
+    
+    # Status distribution
+    status_counts = {
+        "pending": sum(1 for p in passengers if p['status'] == 'pending'),
+        "boarded": sum(1 for p in passengers if p['status'] == 'boarded'),
+        "cancelled": sum(1 for p in passengers if p['status'] == 'cancelled')
+    }
+    
+    # Flight occupancy
+    flight_occupancy = []
+    for flight in flights:
+        occupancy_rate = (flight['booked_seats'] / flight['total_seats'] * 100) if flight['total_seats'] > 0 else 0
+        flight_occupancy.append({
+            "flight_id": flight['flight_id'],
+            "route": f"{flight['source_code']}-{flight['destination_code']}",
+            "booked": flight['booked_seats'],
+            "total": flight['total_seats'],
+            "occupancy": round(occupancy_rate, 2)
+        })
+    
+    # Airport statistics
+    airport_stats = []
+    for airport in airports:
+        departures = sum(1 for f in flights if f['source_code'] == airport['code'])
+        arrivals = sum(1 for f in flights if f['destination_code'] == airport['code'])
+        airport_stats.append({
+            "code": airport['code'],
+            "name": airport['name'],
+            "departures": departures,
+            "arrivals": arrivals,
+            "total_flights": departures + arrivals
+        })
+    
+    # Boarding queue statistics
+    all_queues = await db.boarding_queue.find({}, {"_id": 0}).to_list(1000)
+    queue_by_flight = {}
+    for item in all_queues:
+        if item['flight_id'] not in queue_by_flight:
+            queue_by_flight[item['flight_id']] = 0
+        queue_by_flight[item['flight_id']] += 1
+    
+    return {
+        "status_distribution": status_counts,
+        "flight_occupancy": sorted(flight_occupancy, key=lambda x: x['occupancy'], reverse=True),
+        "airport_statistics": sorted(airport_stats, key=lambda x: x['total_flights'], reverse=True),
+        "queue_statistics": queue_by_flight,
+        "total_revenue": len([p for p in passengers if p['status'] != 'cancelled']) * 5000,
+        "cancellation_rate": round((status_counts['cancelled'] / len(passengers) * 100) if passengers else 0, 2)
+    }
+
+# Graph Algorithm APIs - BFS/DFS Pathfinding
+@api_router.get("/graph/bfs/{start}/{end}")
+async def bfs_pathfinding(start: str, end: str):
+    """Find path between airports using BFS"""
+    flights = await db.flights.find({}, {"_id": 0}).to_list(1000)
+    airports = await db.airports.find({}, {"_id": 0}).to_list(1000)
+    airport_codes = {a['code'] for a in airports}
+    
+    if start not in airport_codes or end not in airport_codes:
+        raise HTTPException(status_code=404, detail="Airport not found")
+    
+    # Build adjacency list
+    adj_list = {airport['code']: [] for airport in airports}
+    for flight in flights:
+        adj_list[flight['source_code']].append(flight['destination_code'])
+        adj_list[flight['destination_code']].append(flight['source_code'])
+    
+    # BFS
+    from collections import deque
+    queue = deque([(start, [start])])
+    visited = {start}
+    
+    while queue:
+        current, path = queue.popleft()
+        if current == end:
+            return {"path": path, "algorithm": "BFS", "hops": len(path) - 1}
+        
+        for neighbor in adj_list[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+    
+    return {"path": [], "algorithm": "BFS", "message": "No path found"}
+
+@api_router.get("/graph/dfs/{start}/{end}")
+async def dfs_pathfinding(start: str, end: str):
+    """Find path between airports using DFS"""
+    flights = await db.flights.find({}, {"_id": 0}).to_list(1000)
+    airports = await db.airports.find({}, {"_id": 0}).to_list(1000)
+    airport_codes = {a['code'] for a in airports}
+    
+    if start not in airport_codes or end not in airport_codes:
+        raise HTTPException(status_code=404, detail="Airport not found")
+    
+    # Build adjacency list
+    adj_list = {airport['code']: [] for airport in airports}
+    for flight in flights:
+        adj_list[flight['source_code']].append(flight['destination_code'])
+        adj_list[flight['destination_code']].append(flight['source_code'])
+    
+    # DFS
+    def dfs(current, visited, path):
+        if current == end:
+            return path
+        
+        for neighbor in adj_list[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                result = dfs(neighbor, visited, path + [neighbor])
+                if result:
+                    return result
+                visited.remove(neighbor)
+        return None
+    
+    visited = {start}
+    path = dfs(start, visited, [start])
+    
+    if path:
+        return {"path": path, "algorithm": "DFS", "hops": len(path) - 1}
+    return {"path": [], "algorithm": "DFS", "message": "No path found"}
+
+# Validation API
+@api_router.post("/validate/passenger")
+async def validate_passenger_data(passenger: PassengerCreate):
+    """Validate passenger data before submission"""
+    errors = []
+    
+    # Check flight exists
+    flight = await db.flights.find_one({"flight_id": passenger.flight_id}, {"_id": 0})
+    if not flight:
+        errors.append("Flight does not exist")
+    elif flight['booked_seats'] >= flight['total_seats']:
+        errors.append("Flight is full")
+    
+    # Check passport format (basic validation)
+    if not passenger.passport or len(passenger.passport) < 8:
+        errors.append("Invalid passport number")
+    
+    # Check seat number format
+    if not passenger.seat_number or len(passenger.seat_number) < 2:
+        errors.append("Invalid seat number")
+    
+    # Check duplicate passport
+    existing = await db.passengers.find_one({"passport": passenger.passport}, {"_id": 0})
+    if existing:
+        errors.append("Passenger with this passport already exists")
+    
+    return {
+        "valid": len(errors) == 0,
+        "errors": errors
+    }
+
+
 app.include_router(api_router)
 
 app.add_middleware(
