@@ -148,9 +148,31 @@ export const Dashboard = () => {
   };
 
   const addPassenger = async () => {
+    // Validate before submission
+    const errors = {};
+    if (!newPassenger.name || newPassenger.name.length < 2) {
+      errors.name = 'Name must be at least 2 characters';
+    }
+    if (!newPassenger.passport || newPassenger.passport.length < 8) {
+      errors.passport = 'Invalid passport number';
+    }
+    if (!newPassenger.flight_id) {
+      errors.flight_id = 'Please select a flight';
+    }
+    if (!newPassenger.seat_number || newPassenger.seat_number.length < 2) {
+      errors.seat_number = 'Invalid seat number';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      toast.error('Please fix validation errors');
+      return;
+    }
+
+    setValidationErrors({});
     try {
       await axios.post(`${API}/passengers`, newPassenger);
-      toast.success('Passenger added successfully');
+      toast.success(`Passenger ${newPassenger.name} added successfully! 🎉`);
       setNewPassenger({ name: '', passport: '', flight_id: '', seat_number: '' });
       await loadData();
     } catch (error) {
