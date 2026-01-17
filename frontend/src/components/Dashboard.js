@@ -446,7 +446,11 @@ export const Dashboard = () => {
 
               <div id="hash-section" className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div className="lg:col-span-3">
-                  <HashTableVisualization hashTable={hashTable} />
+                  <EnhancedHashTableVisualization 
+                    passengers={passengers}
+                    animationSpeed={animationSpeed}
+                    showSteps={showDSAInfo}
+                  />
                 </div>
 
                 <div className="space-y-4">
