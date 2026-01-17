@@ -1,0 +1,133 @@
+{
+  "identity": {
+    "name": "AeroOps DSA Simulator",
+    "persona": "E1: The Anti-AI Designer",
+    "tone": "Professional, Technical, Educational, Aviation-Grade",
+    "theme_mode": "dark"
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Rajdhani, sans-serif",
+      "body": "IBM Plex Sans, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "weights": {
+      "light": 300,
+      "regular": 400,
+      "medium": 500,
+      "bold": 700
+    },
+    "sizes": {
+      "h1": "text-4xl md:text-5xl tracking-tight",
+      "h2": "text-3xl md:text-4xl tracking-tight",
+      "h3": "text-2xl md:text-3xl",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm leading-snug",
+      "tiny": "text-xs tracking-wider uppercase"
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": "#0B1120",
+      "surface": "#151E32",
+      "surface_highlight": "#1E293B",
+      "primary": "#0EA5E9",
+      "primary_hover": "#0284C7",
+      "secondary": "#64748B",
+      "accent": "#F59E0B",
+      "success": "#10B981",
+      "danger": "#EF4444",
+      "text_primary": "#F8FAFC",
+      "text_secondary": "#94A3B8",
+      "border": "#334155"
+    },
+    "semantic": {
+      "graph_node": "#0EA5E9",
+      "graph_edge": "#475569",
+      "graph_highlight": "#F59E0B",
+      "queue_item": "#10B981",
+      "stack_item": "#EF4444",
+      "heap_node": "#8B5CF6"
+    }
+  },
+  "layout": {
+    "grid_system": "Bento Grid (CSS Grid)",
+    "spacing": {
+      "container_padding": "p-6 md:p-8",
+      "element_gap": "gap-4 md:gap-6",
+      "section_margin": "my-8"
+    },
+    "containers": {
+      "dashboard": "grid grid-cols-1 md:grid-cols-12 gap-6",
+      "module_split": "grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-100px)]",
+      "card": "bg-surface border border-border rounded-lg p-6 shadow-lg relative overflow-hidden"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-primary text-white hover:bg-primary_hover font-medium px-4 py-2 rounded-md transition-all shadow-[0_0_10px_rgba(14,165,233,0.3)]",
+      "secondary": "bg-surface border border-border text-text_primary hover:bg-surface_highlight px-4 py-2 rounded-md transition-all",
+      "danger": "bg-danger/10 text-danger border border-danger/20 hover:bg-danger/20 px-4 py-2 rounded-md transition-all"
+    },
+    "inputs": {
+      "default": "bg-background border border-border text-text_primary rounded-md px-3 py-2 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none font-mono"
+    },
+    "cards": {
+      "glass": "bg-surface/80 backdrop-blur-md border border-white/10 shadow-xl"
+    },
+    "visualizations": {
+      "container": "bg-background border border-border rounded-lg w-full h-full min-h-[400px] relative overflow-hidden",
+      "controls": "flex flex-wrap gap-2 items-center p-4 bg-surface border-b border-border"
+    }
+  },
+  "visual_enhancers": {
+    "radar_scan": "absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0_340deg,rgba(14,165,233,0.1)_360deg)] animate-spin-slow pointer-events-none opacity-20",
+    "grid_lines": "bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:40px_40px]",
+    "glass_overlay": "backdrop-blur-sm bg-black/30"
+  },
+  "motion": {
+    "transitions": "transition-all duration-300 ease-out",
+    "animations": {
+      "fade_in": "animate-in fade-in duration-500",
+      "slide_up": "animate-in slide-in-from-bottom-4 duration-500",
+      "pulse_slow": "animate-pulse duration-[3000ms]"
+    }
+  },
+  "accessibility": {
+    "contrast": "Ensure 4.5:1 for text",
+    "focus_states": "Visible ring-2 ring-primary ring-offset-2 ring-offset-background",
+    "reduced_motion": "Respect prefers-reduced-motion media query"
+  },
+  "image_urls": {
+    "hero_bg": "https://images.unsplash.com/photo-1761397300888-348e0dbdcc09?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDN8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBhaXJwb3J0JTIwdGVybWluYWwlMjBuaWdodCUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3Njg2MjU1NzV8MA&ixlib=rb-4.1.0&q=85",
+    "waiting_area": "https://images.unsplash.com/photo-1762801157442-8089bb7c05bf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDN8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBhaXJwb3J0JTIwdGVybWluYWwlMjBuaWdodCUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3Njg2MjU1NzV8MA&ixlib=rb-4.1.0&q=85",
+    "runway_lights": "https://images.unsplash.com/photo-1762673761837-8d6149d0c529?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxhaXJwbGFuZSUyMHJ1bndheSUyMG5pZ2h0JTIwbGlnaHRzfGVufDB8fHx8MTc2ODYyNTU3N3ww&ixlib=rb-4.1.0&q=85",
+    "plane_tail": "https://images.unsplash.com/photo-1759203665235-82d52aa4473d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwyfHxhaXJwbGFuZSUyMHJ1bndheSUyMG5pZ2h0JTIwbGlnaHRzfGVufDB8fHx8MTc2ODYyNTU3N3ww&ixlib=rb-4.1.0&q=85",
+    "plane_service": "https://images.unsplash.com/photo-1760055588146-7771d22a7a38?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwzfHxhaXJwbGFuZSUyMHJ1bndheSUyMG5pZ2h0JTIwbGlnaHRzfGVufDB8fHx8MTc2ODYyNTU3N3ww&ixlib=rb-4.1.0&q=85"
+  },
+  "instructions_to_main_agent": [
+    "Implement the 'Aviation Dark Mode' strictly. No light mode toggles unless requested.",
+    "Use 'Rajdhani' font for all headers to give that technical cockpit feel.",
+    "Use 'JetBrains Mono' for all data values, IDs, and code snippets.",
+    "Ensure all visualizations (Cytoscape, etc.) use the defined semantic colors (Blue for nodes, Green for active, Red for deleted).",
+    "The Dashboard should look like a 'Mission Control' center. Use borders, grids, and monospace text.",
+    "For the 'Airport Network' (Graph), use Cytoscape.js with a dark style stylesheet.",
+    "For 'Passenger Database' (Hash Table), visualize the buckets and chains clearly.",
+    "For 'Boarding Queue', use a circular visualization if possible, or a clear linear queue with pointers.",
+    "For 'Flight Scheduler' (Min Heap), visualize the binary tree structure.",
+    "Add a 'DSA Lab Project' badge in the top right corner of the header.",
+    "Ensure all interactive elements have 'data-testid' attributes."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not use generic centered layouts. Use dense, data-rich grids.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur) for modals and overlays.",
+    "Every interaction needs micro-animations - hover states, transitions.",
+    "Use 2-3x more spacing than feels comfortable in content areas, but keep data tables dense.",
+    "Subtle grain textures or noise overlays can enhance the 'monitor' feel.",
+    "Prioritize using pre-existing components from src/components/ui when applicable.",
+    "Components MUST use named exports.",
+    "Pages MUST use default exports.",
+    "Use 'sonner' for toasts."
+  ]
+}
