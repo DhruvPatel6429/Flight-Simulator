@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { GraphVisualization } from './GraphVisualization';
-import { HashTableVisualization } from './HashTableVisualization';
-import { QueueVisualization } from './QueueVisualization';
-import { StackVisualization } from './StackVisualization';
-import { HeapVisualization } from './HeapVisualization';
+import { EnhancedGraphVisualization } from './EnhancedGraphVisualization';
+import { EnhancedHashTableVisualization } from './EnhancedHashTableVisualization';
+import { EnhancedQueueVisualization } from './EnhancedQueueVisualization';
+import { EnhancedStackVisualization } from './EnhancedStackVisualization';
+import { EnhancedHeapVisualization } from './EnhancedHeapVisualization';
+import { OperationControlPanel } from './OperationControlPanel';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -29,6 +30,7 @@ export const Dashboard = () => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [showDSAInfo, setShowDSAInfo] = useState(false);
   const [animationSpeed, setAnimationSpeed] = useState('normal');
+  const [stepMode, setStepMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [newAirport, setNewAirport] = useState({ code: '', name: '', city: '' });
