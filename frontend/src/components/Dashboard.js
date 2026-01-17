@@ -65,14 +65,15 @@ export const Dashboard = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const [airportsRes, flightsRes, passengersRes, hashTableRes, adjListRes, analyticsRes, cancellationsRes] = await Promise.all([
+      const [airportsRes, flightsRes, passengersRes, hashTableRes, adjListRes, analyticsRes, cancellationsRes, detailedAnalyticsRes] = await Promise.all([
         axios.get(`${API}/airports`),
         axios.get(`${API}/flights`),
         axios.get(`${API}/passengers`),
         axios.get(`${API}/passengers/hash-table`),
         axios.get(`${API}/graph/adjacency-list`),
         axios.get(`${API}/analytics`),
-        axios.get(`${API}/cancellations`)
+        axios.get(`${API}/cancellations`),
+        axios.get(`${API}/analytics/detailed`)
       ]);
 
       setAirports(airportsRes.data);
@@ -82,6 +83,7 @@ export const Dashboard = () => {
       setAdjacencyList(adjListRes.data);
       setAnalytics(analyticsRes.data);
       setCancellations(cancellationsRes.data);
+      setDetailedAnalytics(detailedAnalyticsRes.data);
 
       const queuePromises = flightsRes.data.map(f => 
         axios.get(`${API}/boarding-queue/${f.flight_id}`)
@@ -97,7 +99,7 @@ export const Dashboard = () => {
       console.error('Error loading data:', error);
       toast.error('Failed to load data');
     }
-  };
+  }, []);
 
   const initializeData = async () => {
     setLoading(true);
