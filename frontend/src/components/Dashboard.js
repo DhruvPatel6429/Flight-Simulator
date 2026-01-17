@@ -566,9 +566,11 @@ export const Dashboard = () => {
                   </div>
 
                   {selectedFlight && boardingQueues[selectedFlight] && (
-                    <QueueVisualization 
+                    <EnhancedQueueVisualization 
                       queue={boardingQueues[selectedFlight]} 
                       flightId={selectedFlight}
+                      animationSpeed={animationSpeed}
+                      showSteps={showDSAInfo}
                     />
                   )}
                 </div>
