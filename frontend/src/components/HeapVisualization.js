@@ -84,14 +84,14 @@ export const HeapVisualization = ({ flights }) => {
   }
   
   const maxLevels = Math.ceil(Math.log2(sortedFlights.length + 1));
-  const svgHeight = maxLevels * 100 + 100;
+  const svgHeight = maxLevels * 120 + 100;
   
   return (
     <div className="w-full overflow-x-auto" data-testid="heap-visualization">
       <svg 
         width="100%" 
         height={svgHeight}
-        viewBox="0 0 100 100"
+        viewBox={`0 0 800 ${svgHeight}`}
         preserveAspectRatio="xMidYMid meet"
         className="min-w-[600px]"
       >
