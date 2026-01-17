@@ -323,11 +323,13 @@ export const Dashboard = () => {
 
               <div id="graph-section" className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 bg-aviation-bg border border-aviation-border rounded-lg p-4">
-                  <GraphVisualization 
+                  <EnhancedGraphVisualization 
                     airports={airports}
                     flights={flights}
                     selectedNode={selectedNode}
                     onNodeClick={setSelectedNode}
+                    animationSpeed={animationSpeed}
+                    showSteps={showDSAInfo}
                   />
                 </div>
                 
