@@ -52,7 +52,18 @@ export const Dashboard = () => {
     loadData();
   }, []);
 
-  const loadData = async () => {
+  // Auto-refresh functionality
+  useEffect(() => {
+    if (autoRefresh) {
+      const interval = setInterval(() => {
+        loadData();
+        toast.info('Data refreshed automatically', { duration: 2000 });
+      }, 30000); // Refresh every 30 seconds
+      return () => clearInterval(interval);
+    }
+  }, [autoRefresh]);
+
+  const loadData = useCallback(async () => {
     try {
       const [airportsRes, flightsRes, passengersRes, hashTableRes, adjListRes, analyticsRes, cancellationsRes] = await Promise.all([
         axios.get(`${API}/airports`),
