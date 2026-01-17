@@ -279,6 +279,9 @@ async def push_cancellation(ticket_id: str):
     if not passenger:
         raise HTTPException(status_code=404, detail="Passenger not found")
     
+    if passenger['status'] == 'cancelled':
+        raise HTTPException(status_code=400, detail="Ticket already cancelled")
+    
     cancellation = {
         "ticket_id": ticket_id,
         "passenger_name": passenger['name'],
@@ -300,7 +303,14 @@ async def push_cancellation(ticket_id: str):
             {"$inc": {"booked_seats": -1}}
         )
     
-    return {"message": "Cancellation recorded", "cancellation": cancellation}
+    # Return without _id
+    cancellation_response = {
+        "ticket_id": cancellation["ticket_id"],
+        "passenger_name": cancellation["passenger_name"],
+        "flight_id": cancellation["flight_id"],
+        "timestamp": cancellation["timestamp"]
+    }
+    return {"message": "Cancellation recorded", "cancellation": cancellation_response}
 
 @api_router.post("/cancellations/pop")
 async def pop_cancellation():
