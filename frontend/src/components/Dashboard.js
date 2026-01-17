@@ -31,17 +31,22 @@ export const Dashboard = () => {
   const [boardingQueues, setBoardingQueues] = useState({});
   const [cancellations, setCancellations] = useState([]);
   const [analytics, setAnalytics] = useState(null);
+  const [detailedAnalytics, setDetailedAnalytics] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [showDSAInfo, setShowDSAInfo] = useState(false);
   const [animationSpeed, setAnimationSpeed] = useState('normal');
   const [stepMode, setStepMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [showBulkDialog, setShowBulkDialog] = useState(false);
+  const [showImportExportDialog, setShowImportExportDialog] = useState(false);
 
   const [newAirport, setNewAirport] = useState({ code: '', name: '', city: '' });
   const [newFlight, setNewFlight] = useState({ flight_id: '', source_code: '', destination_code: '', departure_time: '', total_seats: 180 });
   const [newPassenger, setNewPassenger] = useState({ name: '', passport: '', flight_id: '', seat_number: '' });
   const [searchTicket, setSearchTicket] = useState('');
   const [selectedFlight, setSelectedFlight] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     loadData();
