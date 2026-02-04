@@ -809,6 +809,14 @@ export const Dashboard = () => {
                 </div>
               )}
             </Card>
+
+            {/* DSA Complexity & Code for Heap */}
+            {showDSAInfo && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <DSAComplexityTooltip dataStructure="heap" show={showDSAInfo} />
+                <CodeViewer algorithm="heap" language="python" />
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
