@@ -472,6 +472,7 @@ export const Dashboard = () => {
               flights={flights}
               animationSpeed={animationSpeed}
               showEducational={showDSAInfo}
+              stepMode={stepMode}
             />
 
             {/* Pathfinding Visualizer (Comparison) */}
