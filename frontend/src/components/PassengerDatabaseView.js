@@ -247,7 +247,7 @@ export const PassengerDatabaseView = () => {
                                         {passenger.ticket_id}
                                       </div>
                                       <div className="text-xs text-aviation-text-primary">
-                                        {passenger.passenger_name}
+                                        {passenger.name}
                                       </div>
                                       <div className="text-xs text-aviation-text-secondary">
                                         {passenger.flight_id}
