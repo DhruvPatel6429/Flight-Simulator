@@ -4,11 +4,70 @@ import { Button } from './ui/button';
 import { Code, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
 
-export const CodeViewer = ({ algorithm, language = 'python' }) => {
+export const CodeViewer = ({ algorithm, language = 'c' }) => {
   const [copied, setCopied] = useState(false);
+  const [selectedLang, setSelectedLang] = useState(language);
 
   const codeSnippets = {
     bfs: {
+      c: `#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define MAX 100
+
+// Queue structure for BFS
+typedef struct {
+    int items[MAX];
+    int front, rear;
+} Queue;
+
+void initQueue(Queue* q) {
+    q->front = -1;
+    q->rear = -1;
+}
+
+bool isEmpty(Queue* q) {
+    return q->front == -1;
+}
+
+void enqueue(Queue* q, int value) {
+    if (q->front == -1) q->front = 0;
+    q->rear++;
+    q->items[q->rear] = value;
+}
+
+int dequeue(Queue* q) {
+    int item = q->items[q->front];
+    q->front++;
+    if (q->front > q->rear) {
+        q->front = q->rear = -1;
+    }
+    return item;
+}
+
+// BFS implementation
+void bfs(int graph[MAX][MAX], int n, int start) {
+    bool visited[MAX] = {false};
+    Queue q;
+    initQueue(&q);
+    
+    visited[start] = true;
+    enqueue(&q, start);
+    
+    printf("BFS Traversal: ");
+    while (!isEmpty(&q)) {
+        int current = dequeue(&q);
+        printf("%d ", current);
+        
+        for (int i = 0; i < n; i++) {
+            if (graph[current][i] && !visited[i]) {
+                visited[i] = true;
+                enqueue(&q, i);
+            }
+        }
+    }
+    printf("\\n");
+}`,
       python: `def bfs(graph, start, end):
     """Breadth-First Search implementation"""
     visited = set([start])
