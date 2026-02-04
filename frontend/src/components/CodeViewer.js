@@ -67,48 +67,7 @@ void bfs(int graph[MAX][MAX], int n, int start) {
     }
     printf("\\n");
 }`,
-      python: `def bfs(graph, start, end):
-    """Breadth-First Search implementation"""
-    visited = set([start])
-    queue = [(start, [start])]
-    
-    while queue:
-        current, path = queue.pop(0)
-        
-        if current == end:
-            return path
-        
-        for neighbor in graph[current]:
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append((neighbor, path + [neighbor]))
-    
-    return []  # No path found`,
-      javascript: `function bfs(graph, start, end) {
-  // Breadth-First Search implementation
-  const visited = new Set([start]);
-  const queue = [[start, [start]]];
-  
-  while (queue.length > 0) {
-    const [current, path] = queue.shift();
-    
-    if (current === end) {
-      return path;
-    }
-    
-    for (const neighbor of graph[current] || []) {
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor);
-        queue.push([neighbor, [...path, neighbor]]);
-      }
-    }
-  }
-  
-  return [];  // No path found
-}`
-    },
-    dfs: {
-      c: `#include <stdio.h>
+    dfs: `#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #define MAX 100
