@@ -820,7 +820,7 @@ export const Dashboard = () => {
             {showDSAInfo && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <DSAComplexityTooltip dataStructure="heap" show={showDSAInfo} />
-                <CodeViewer algorithm="heap" language="python" />
+                <CodeViewer algorithm="heap" language="c" />
               </div>
             )}
           </TabsContent>
