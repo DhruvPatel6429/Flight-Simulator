@@ -7,9 +7,9 @@ import { toast } from 'sonner';
 export const CodeViewer = ({ algorithm }) => {
   const [copied, setCopied] = useState(false);
 
+  // Only C code - no other languages
   const codeSnippets = {
-    bfs: {
-      c: `#include <stdio.h>
+    bfs: `#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #define MAX 100
