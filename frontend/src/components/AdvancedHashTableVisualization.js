@@ -120,35 +120,61 @@ export const AdvancedHashTableVisualization = ({
     if (!hashData) return null;
     
     return (
-      <div className="space-y-2">
+      <div className="space-y-3">
         {Object.entries(hashData.table).map(([index, items]) => (
           <div 
             key={index} 
-            className={`flex items-center gap-2 p-2 rounded transition-all ${
-              animatingIndex === parseInt(index) ? 'bg-yellow-500/20 scale-105' : ''
+            className={`border border-aviation-border rounded-lg p-3 transition-all ${
+              animatingIndex === parseInt(index) ? 'bg-yellow-500/20 border-yellow-500' : 'bg-aviation-bg'
             }`}
           >
-            <div className="w-16 text-center font-mono text-sm bg-aviation-bg border border-aviation-border rounded px-2 py-1">
-              [{index}]
-            </div>
-            <div className="flex-1 flex items-center gap-2 overflow-x-auto">
-              {items.length === 0 ? (
-                <div className="text-aviation-text-secondary text-sm italic">Empty</div>
-              ) : (
-                items.map((passenger, idx) => (
-                  <div key={passenger.ticket_id} className="flex items-center gap-1">
-                    {idx > 0 && <div className="text-aviation-text-secondary">→</div>}
-                    <div className={`border rounded px-3 py-1 text-xs font-mono ${getStatusColor(passenger.status)}`}>
-                      {passenger.ticket_id}
+            <div className="flex items-start gap-3">
+              {/* Index Label */}
+              <div className="flex-shrink-0 w-20">
+                <div className="bg-aviation-surface border border-aviation-border rounded px-3 py-2 text-center">
+                  <div className="text-xs text-aviation-text-secondary mb-1">Index</div>
+                  <div className="font-mono font-bold text-aviation-text-primary">[{index}]</div>
+                </div>
+              </div>
+              
+              {/* Linked List Chain */}
+              <div className="flex-1 min-w-0">
+                {items.length === 0 ? (
+                  <div className="flex items-center justify-center h-full text-aviation-text-secondary text-sm italic border border-dashed border-aviation-border rounded px-4 py-2">
+                    NULL (Empty bucket)
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {/* Collision warning */}
+                    {items.length > 1 && (
+                      <div className="flex items-center gap-2 text-xs bg-yellow-500/10 border border-yellow-500/50 rounded px-2 py-1">
+                        <AlertTriangle className="w-3 h-3 text-yellow-500" />
+                        <span className="text-yellow-500 font-bold">{items.length} Collisions - Separate Chaining</span>
+                      </div>
+                    )}
+                    
+                    {/* Chain visualization */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      {items.map((passenger, idx) => (
+                        <React.Fragment key={passenger.ticket_id}>
+                          {idx > 0 && (
+                            <div className="text-aviation-text-secondary font-bold text-lg">→</div>
+                          )}
+                          <div className={`border-2 rounded-lg px-4 py-2 ${getStatusColor(passenger.status)} shadow-sm`}>
+                            <div className="text-xs font-mono font-bold mb-1">
+                              {passenger.ticket_id}
+                            </div>
+                            <div className="text-xs opacity-75">
+                              {passenger.passenger_name}
+                            </div>
+                          </div>
+                        </React.Fragment>
+                      ))}
+                      <div className="text-aviation-text-secondary/50 text-sm font-mono">→ NULL</div>
                     </div>
                   </div>
-                ))
-              )}
-              {items.length > 1 && (
-                <div className="ml-2 text-xs text-yellow-500 font-bold">
-                  ⚠ {items.length} Collisions
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         ))}
