@@ -186,22 +186,33 @@ export const AdvancedHashTableVisualization = ({
     if (!hashData) return null;
     
     return (
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-5 md:grid-cols-8 lg:grid-cols-10 gap-3">
         {Object.entries(hashData.table).map(([index, item]) => (
           <div 
             key={index}
-            className={`border rounded p-3 transition-all ${
-              animatingIndex === parseInt(index) ? 'bg-yellow-500/20 scale-105 border-yellow-500' : 
-              item ? 'bg-aviation-bg border-aviation-border' : 'bg-aviation-surface/30 border-aviation-border/50'
+            className={`relative border-2 rounded-lg p-3 transition-all min-h-[80px] flex flex-col justify-center ${
+              animatingIndex === parseInt(index) ? 'bg-yellow-500/20 scale-105 border-yellow-500 shadow-lg' : 
+              item ? 'bg-aviation-bg border-aviation-border hover:shadow-md' : 'bg-aviation-surface/30 border-aviation-border/30 border-dashed'
             }`}
           >
-            <div className="text-xs font-mono text-aviation-text-secondary mb-1">[{index}]</div>
+            {/* Index Badge */}
+            <div className="absolute -top-2 -left-2 bg-aviation-accent text-white text-xs font-mono font-bold px-2 py-0.5 rounded">
+              {index}
+            </div>
+            
             {item ? (
-              <div className={`text-xs font-mono font-bold truncate ${getStatusColor(item.status)}`}>
-                {item.ticket_id}
+              <div className={`text-center ${getStatusColor(item.status)} rounded-lg p-2`}>
+                <div className="text-xs font-mono font-bold mb-1">
+                  {item.ticket_id}
+                </div>
+                <div className="text-xs opacity-75 truncate">
+                  {item.passenger_name}
+                </div>
               </div>
             ) : (
-              <div className="text-xs text-aviation-text-secondary italic">Empty</div>
+              <div className="text-center">
+                <div className="text-xs text-aviation-text-secondary/50 italic">Empty</div>
+              </div>
             )}
           </div>
         ))}
