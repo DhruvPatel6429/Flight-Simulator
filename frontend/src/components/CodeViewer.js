@@ -532,7 +532,7 @@ int extractMin(MinHeap* heap) {
     }
   };
 
-  const code = codeSnippets[algorithm]?.[language] || 'Code not available';
+  const code = codeSnippets[algorithm]?.[selectedLang] || 'Code not available';
 
   const copyCode = () => {
     navigator.clipboard.writeText(code);
@@ -544,14 +544,26 @@ int extractMin(MinHeap* heap) {
   return (
     <Card className="bg-aviation-surface border-aviation-border">
       <div className="flex items-center justify-between p-4 border-b border-aviation-border">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Code className="w-5 h-5 text-aviation-accent" />
           <h4 className="font-bold text-aviation-text-primary">
             Implementation: {algorithm.toUpperCase()}
           </h4>
-          <span className="px-2 py-1 bg-aviation-accent/20 rounded text-xs font-mono text-aviation-accent">
-            {language}
-          </span>
+          <div className="flex gap-1">
+            {['c', 'python', 'javascript'].map((lang) => (
+              <button
+                key={lang}
+                onClick={() => setSelectedLang(lang)}
+                className={`px-3 py-1 rounded text-xs font-mono font-bold transition-all ${
+                  selectedLang === lang
+                    ? 'bg-aviation-accent text-white'
+                    : 'bg-aviation-bg text-aviation-text-secondary hover:bg-aviation-surface-highlight'
+                }`}
+              >
+                {lang === 'c' ? 'C' : lang === 'python' ? 'Python' : 'JS'}
+              </button>
+            ))}
+          </div>
         </div>
         <Button
           onClick={copyCode}
@@ -573,7 +585,7 @@ int extractMin(MinHeap* heap) {
         </Button>
       </div>
       <div className="p-4">
-        <pre className="text-xs font-mono text-aviation-text-secondary bg-aviation-bg p-4 rounded overflow-x-auto">
+        <pre className="text-xs font-mono text-aviation-text-secondary bg-aviation-bg p-4 rounded overflow-x-auto max-h-96 overflow-y-auto">
           <code>{code}</code>
         </pre>
       </div>
