@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
-import { Code, Copy, Check } from 'lucide-react';
+import { Code, Copy, Check, Award, Zap, BookOpen, Target } from 'lucide-react';
 import { toast } from 'sonner';
 
-export const CodeViewer = ({ algorithm, language = 'c' }) => {
+export const CodeViewer = ({ algorithm }) => {
   const [copied, setCopied] = useState(false);
-  const [selectedLang, setSelectedLang] = useState(language);
 
   const codeSnippets = {
     bfs: {
