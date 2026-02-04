@@ -228,6 +228,42 @@ backend:
         agent: "main"
         comment: "Real-time analytics for airports, flights, tickets, and passenger statuses."
 
+  - task: "Advanced Hash Table - Trigger Rehash Button Fix"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/components/AdvancedHashTableVisualization.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed Trigger Rehash button to always be enabled (removed dependency on needs_resize flag). Button now triggers rehashing animation and doubles table size on click. Backend API already functional at /api/passengers/hash-table/rehash. Needs testing."
+
+  - task: "Advanced Hash Table - Compare Methods Button Fix"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/components/AdvancedHashTableVisualization.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Compare Methods button already functional - loads all 4 collision methods (separate chaining, linear probing, quadratic probing, double hashing) and displays side-by-side comparison with load factors, collision counts, and metrics. Needs testing."
+
+  - task: "Advanced Hash Table - Remove Resize Status Card"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/components/AdvancedHashTableVisualization.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Removed 'Resize Status' card (Needed/Good indicator) from statistics panel. Now shows only 3 cards: Load Factor, Collisions, and Table Size. Statistics grid changed from 4 columns to 3 columns."
+
   - task: "Passenger Database View with Add/Search Forms and Export PNG"
     implemented: true
     working: "NA"
