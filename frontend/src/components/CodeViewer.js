@@ -180,73 +180,7 @@ char* search(HashTable* ht, char* key) {
     }
     return NULL;  // Not found
 }`,
-      python: `class HashTable:
-    def __init__(self, size=10):
-        self.size = size
-        self.table = [[] for _ in range(size)]
-    
-    def hash_function(self, key):
-        """Custom hash function"""
-        hash_val = 0
-        for char in str(key):
-            hash_val = (hash_val * 31 + ord(char)) % self.size
-        return hash_val
-    
-    def insert(self, key, value):
-        """Insert with separate chaining"""
-        index = self.hash_function(key)
-        # Check if key exists
-        for i, (k, v) in enumerate(self.table[index]):
-            if k == key:
-                self.table[index][i] = (key, value)
-                return
-        # Add new entry
-        self.table[index].append((key, value))
-    
-    def search(self, key):
-        """Search for a key"""
-        index = self.hash_function(key)
-        for k, v in self.table[index]:
-            if k == key:
-                return v
-        return None`,
-      javascript: `class HashTable {
-  constructor(size = 10) {
-    this.size = size;
-    this.table = Array.from({ length: size }, () => []);
-  }
-  
-  hashFunction(key) {
-    // Custom hash function
-    let hashVal = 0;
-    for (const char of String(key)) {
-      hashVal = (hashVal * 31 + char.charCodeAt(0)) % this.size;
-    }
-    return hashVal;
-  }
-  
-  insert(key, value) {
-    // Insert with separate chaining
-    const index = this.hashFunction(key);
-    // Check if key exists
-    const existing = this.table[index].findIndex(([k]) => k === key);
-    if (existing !== -1) {
-      this.table[index][existing] = [key, value];
-    } else {
-      this.table[index].push([key, value]);
-    }
-  }
-  
-  search(key) {
-    // Search for a key
-    const index = this.hashFunction(key);
-    const entry = this.table[index].find(([k]) => k === key);
-    return entry ? entry[1] : null;
-  }
-}`
-    },
-    stack: {
-      c: `#include <stdio.h>
+    stack: `#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #define MAX 100
