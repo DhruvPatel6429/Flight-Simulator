@@ -101,8 +101,8 @@ export const PassengerDatabaseView = () => {
 
     try {
       const response = await axios.post(`${API}/passengers`, {
-        passenger_name: newPassenger.name,
-        passport_number: newPassenger.passport,
+        name: newPassenger.name,
+        passport: newPassenger.passport,
         flight_id: newPassenger.flight_id,
         seat_number: newPassenger.seat_number,
         status: 'pending'
