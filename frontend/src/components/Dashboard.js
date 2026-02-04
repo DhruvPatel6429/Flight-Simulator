@@ -45,6 +45,8 @@ export const Dashboard = () => {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [showBulkDialog, setShowBulkDialog] = useState(false);
   const [showImportExportDialog, setShowImportExportDialog] = useState(false);
+  const [showExploreModal, setShowExploreModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('graph');
 
   const [newAirport, setNewAirport] = useState({ code: '', name: '', city: '' });
   const [newFlight, setNewFlight] = useState({ flight_id: '', source_code: '', destination_code: '', departure_time: '', total_seats: 180 });
