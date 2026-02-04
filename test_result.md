@@ -250,7 +250,7 @@ frontend:
 
   - task: "Operation Control Panel (Animation Speed, Educational Mode, Execution Mode)"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/components/OperationControlPanel.js"
     stuck_count: 0
     priority: "high"
@@ -259,6 +259,33 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Implemented control panel with animation speed selection (Slow/Normal/Fast), educational mode toggle for DSA explanations, execution mode toggle, and status color legend. Needs UI testing."
+      - working: true
+        agent: "main"
+        comment: "Fixed execution mode - now properly connected to all visualization components for step-by-step control."
+
+  - task: "Animated Pathfinding Visualization"
+    implemented: true
+    working: true
+    file: "frontend/src/components/AnimatedPathfinder.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Completely rewritten animation logic with proper state management. Added step mode support with Previous/Next buttons. Fixed pause/resume functionality. Animation now works smoothly with proper speed control."
+
+  - task: "Code Viewer with C Language Support"
+    implemented: true
+    working: true
+    file: "frontend/src/components/CodeViewer.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added complete C code implementations for BFS, DFS, Hash Table, and Heap algorithms. Added language selector (C/Python/JS). Default language changed to C."
 
   - task: "Dashboard Integration with Enhanced Components"
     implemented: true
