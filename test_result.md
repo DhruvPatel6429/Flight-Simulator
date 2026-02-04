@@ -483,11 +483,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Enhanced Heap Tree Visualization - Professional Styling"
-    - "Code Viewer - C Language Only with Educational Explanation"
-    - "Advanced Hash Table Visualization with Collision Comparison"
-    - "Advanced Heap Visualization with Min/Max Dual View"
-    - "Let's Explore Guided Tour Feature"
+    - "Passenger Database View with Add/Search Forms and Export PNG"
+    - "Advanced Hash Table - Trigger Rehash Button Fix"
+    - "Advanced Hash Table - Compare Methods Button Fix"
+    - "Advanced Hash Table - Remove Resize Status Card"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
