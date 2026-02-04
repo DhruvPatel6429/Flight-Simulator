@@ -139,54 +139,125 @@ export const AdvancedHeapVisualization = ({
     const typeColor = type === 'min' ? 'border-blue-500' : 'border-red-500';
     const typeBg = type === 'min' ? 'bg-blue-500/20' : 'bg-red-500/20';
     const typeText = type === 'min' ? 'text-blue-400' : 'text-red-400';
+    const lineColor = type === 'min' ? 'stroke-blue-500' : 'stroke-red-500';
+
+    // Calculate node positions for SVG lines
+    const nodeWidth = 120;
+    const nodeHeight = 80;
+    const levelGap = 100;
+    const svgHeight = maxLevels * levelGap + nodeHeight;
+    const svgWidth = Math.pow(2, maxLevels - 1) * nodeWidth + 200;
+
+    const getNodePosition = (level, posInLevel, nodesInLevel) => {
+      const levelWidth = svgWidth;
+      const spacing = levelWidth / (nodesInLevel + 1);
+      return {
+        x: spacing * (posInLevel + 1),
+        y: level * levelGap + 50
+      };
+    };
+
+    // Generate SVG lines
+    const lines = [];
+    levels.forEach((level, levelIdx) => {
+      level.forEach(({ index }, posInLevel) => {
+        const leftChildIdx = 2 * index + 1;
+        const rightChildIdx = 2 * index + 2;
+        
+        if (leftChildIdx < flights.length) {
+          const parentPos = getNodePosition(levelIdx, posInLevel, level.length);
+          const nextLevel = levels[levelIdx + 1];
+          if (nextLevel) {
+            const childPosInLevel = nextLevel.findIndex(n => n.index === leftChildIdx);
+            if (childPosInLevel !== -1) {
+              const childPos = getNodePosition(levelIdx + 1, childPosInLevel, nextLevel.length);
+              lines.push({ x1: parentPos.x, y1: parentPos.y + nodeHeight/2, x2: childPos.x, y2: childPos.y - nodeHeight/2, type: 'left' });
+            }
+          }
+        }
+        
+        if (rightChildIdx < flights.length) {
+          const parentPos = getNodePosition(levelIdx, posInLevel, level.length);
+          const nextLevel = levels[levelIdx + 1];
+          if (nextLevel) {
+            const childPosInLevel = nextLevel.findIndex(n => n.index === rightChildIdx);
+            if (childPosInLevel !== -1) {
+              const childPos = getNodePosition(levelIdx + 1, childPosInLevel, nextLevel.length);
+              lines.push({ x1: parentPos.x, y1: parentPos.y + nodeHeight/2, x2: childPos.x, y2: childPos.y - nodeHeight/2, type: 'right' });
+            }
+          }
+        }
+      });
+    });
 
     return (
-      <div className="space-y-8">
-        {levels.map((level, levelIdx) => (
-          <div key={levelIdx} className="flex justify-center items-center gap-4" style={{ gap: `${Math.pow(2, maxLevels - levelIdx - 1) * 8}px` }}>
-            {level.map(({ flight, index }) => {
-              const isHighlighted = highlightedIndices.includes(index);
-              const isRoot = index === 0;
-              
-              return (
-                <div key={index} className="flex flex-col items-center">
-                  <div className={`relative border-2 rounded-lg p-3 transition-all ${
-                    isHighlighted ? 'bg-yellow-500/30 border-yellow-500 scale-110' :
-                    isRoot ? `${typeBg} ${typeColor} shadow-lg` :
-                    `bg-aviation-surface ${typeColor}`
-                  }`}>
-                    <div className="text-xs font-mono font-bold text-aviation-text-primary">
-                      {flight.flight_id}
-                    </div>
-                    <div className={`text-xs font-mono ${typeText}`}>
-                      {flight.departure_time}
-                    </div>
-                    <div className="text-xs text-aviation-text-secondary mt-1">
-                      [{index}]
-                    </div>
-                    {isRoot && (
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black text-xs px-2 py-0.5 rounded font-bold whitespace-nowrap">
-                        {type === 'min' ? '⏰ Next Flight' : '📅 Latest Flight'}
-                      </div>
-                    )}
-                  </div>
+      <div className="relative overflow-x-auto py-8">
+        {/* SVG for connection lines */}
+        <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" style={{ height: svgHeight }}>
+          {lines.map((line, idx) => (
+            <line
+              key={idx}
+              x1={line.x1}
+              y1={line.y1}
+              x2={line.x2}
+              y2={line.y2}
+              className={lineColor}
+              strokeWidth="2"
+              opacity="0.6"
+            />
+          ))}
+        </svg>
+        
+        {/* Nodes */}
+        <div className="relative space-y-12" style={{ minHeight: svgHeight }}>
+          {levels.map((level, levelIdx) => {
+            const positions = level.map((_, posInLevel) => 
+              getNodePosition(levelIdx, posInLevel, level.length)
+            );
+            
+            return (
+              <div key={levelIdx} className="relative flex justify-center items-center" style={{ height: nodeHeight }}>
+                {level.map(({ flight, index }, posInLevel) => {
+                  const isHighlighted = highlightedIndices.includes(index);
+                  const isRoot = index === 0;
+                  const position = positions[posInLevel];
                   
-                  {/* Connection lines */}
-                  {levelIdx < levels.length - 1 && (
-                    <div className="flex gap-8 mt-2">
-                      {index * 2 + 1 < flights.length && (
-                        <div className={`w-0.5 h-4 ${typeColor.replace('border', 'bg')}`}></div>
-                      )}
-                      {index * 2 + 2 < flights.length && (
-                        <div className={`w-0.5 h-4 ${typeColor.replace('border', 'bg')}`}></div>
-                      )}
+                  return (
+                    <div 
+                      key={index} 
+                      className="absolute"
+                      style={{ 
+                        left: `${position.x}px`, 
+                        transform: 'translateX(-50%)'
+                      }}
+                    >
+                      <div className={`relative border-2 rounded-lg p-3 transition-all ${
+                        isHighlighted ? 'bg-yellow-500/30 border-yellow-500 scale-110 shadow-xl' :
+                        isRoot ? `${typeBg} ${typeColor} shadow-lg` :
+                        `bg-aviation-surface ${typeColor} shadow-md`
+                      }`} style={{ width: nodeWidth - 20 }}>
+                        <div className="text-xs font-mono font-bold text-aviation-text-primary text-center">
+                          {flight.flight_id}
+                        </div>
+                        <div className={`text-xs font-mono ${typeText} text-center`}>
+                          {flight.departure_time}
+                        </div>
+                        <div className="text-xs text-aviation-text-secondary mt-1 text-center">
+                          [{index}]
+                        </div>
+                        {isRoot && (
+                          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black text-xs px-2 py-0.5 rounded font-bold whitespace-nowrap">
+                            {type === 'min' ? '⏰ Next Flight' : '📅 Latest Flight'}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        ))}
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
