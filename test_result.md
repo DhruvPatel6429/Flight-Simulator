@@ -494,7 +494,88 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: |
-      ✅ LATEST UPDATE - ENHANCED HEAP VISUALIZATION & C-ONLY CODE:
+      ✅ LATEST UPDATE - PASSENGER DATABASE VIEW & HASH TABLE FIXES:
+      
+      🎯 NEW PASSENGER DATABASE VIEW:
+      1. Created dedicated PassengerDatabaseView component matching screenshot:
+         - Clean title section: "Passenger Database" with subtitle
+         - Export PNG button (top-right, cyan color)
+         - Two-column layout: Hash table (left 2/3) + Forms (right 1/3)
+         - Status color legend (Pending-Blue, Boarded-Green, Cancelled-Red)
+         
+      2. Add Passenger Form:
+         - Fields: Name, Passport, Flight ID, Seat Number
+         - Full validation (min lengths, required fields)
+         - Cyan "Add Passenger" button
+         - Auto-generates Ticket ID on backend
+         - Sets status to "pending" by default
+         - Reloads data after successful addition
+         
+      3. Search Passenger Form:
+         - Single field: Ticket ID input
+         - Cyan "Search" button
+         - Enter key support for quick search
+         - Displays full passenger details when found
+         - Shows status with color coding
+         
+      4. Export PNG Functionality:
+         - Uses html2canvas library (already installed)
+         - Captures hash table visualization only
+         - Downloads as PNG with timestamp
+         - High quality (scale: 2)
+         - Dark background preserved
+         
+      5. Hash Table Visualization:
+         - Clean bucket-based display (0-9)
+         - Separate chaining with arrows (→)
+         - Collision indicators when multiple passengers in same bucket
+         - Status color coding on passenger cards
+         - Shows ticket ID, name, flight ID, status
+         - Empty buckets show "Empty" text
+      
+      🔧 ADVANCED HASH TABLE FIXES:
+      6. Trigger Rehash Button:
+         - ✅ FIXED: Always enabled now (removed needs_resize dependency)
+         - Doubles table size on click (e.g., 10 → 20)
+         - Shows animation of items moving to new buckets
+         - Backend API already functional
+         - Displays "Rehashing..." during animation
+         
+      7. Compare Methods Button:
+         - ✅ FIXED: Already functional, just needed testing confirmation
+         - Loads all 4 collision methods simultaneously
+         - Shows side-by-side comparison cards
+         - Displays: Load Factor, Collisions, Items count
+         - Color-coded load factors (green/yellow/red)
+         
+      8. Removed Resize Status Card:
+         - ✅ REMOVED: "Resize Status" card with Needed/Good indicator
+         - Statistics panel now shows 3 cards instead of 4
+         - Cleaner layout: Load Factor, Collisions, Table Size
+      
+      📝 INTEGRATION:
+      9. Dashboard Updates:
+         - Imported PassengerDatabaseView component
+         - Hash Table tab now shows:
+           * PassengerDatabaseView at top (new dedicated view)
+           * Advanced Hash Table Analysis below (collision comparison)
+         - Both views available in same tab
+         - Maintains all existing functionality
+      
+      🎯 READY FOR TESTING:
+      - Frontend compiled successfully ✅
+      - All components created/updated ✅
+      - Backend APIs already functional ✅
+      - Only ESLint warnings (safe to ignore)
+      
+      Need comprehensive UI testing:
+      * Add Passenger form (all fields, validation)
+      * Search Passenger (found/not found scenarios)
+      * Export PNG functionality
+      * Trigger Rehash button (animation, table size change)
+      * Compare Methods button (4 methods comparison)
+      * Hash table collision visualization
+      * Status colors and indicators
       
       🎨 HEAP VISUALIZATION IMPROVEMENTS:
       1. Professional Tree Layout:
