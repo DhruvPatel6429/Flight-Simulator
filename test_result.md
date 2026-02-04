@@ -286,6 +286,42 @@ frontend:
         agent: "main"
         comment: "Implemented min heap binary tree visualization with 'Next Flight' indicator at root, comparison/swap animations, and array representation view. Needs UI testing."
 
+  - task: "Advanced Hash Table Visualization with Collision Comparison"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/components/AdvancedHashTableVisualization.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Complete rewrite with multiple collision method support (separate chaining, linear probing, quadratic probing, double hashing). Includes load factor meter with color coding, dynamic resizing with animation, side-by-side method comparison, collision counter, and performance metrics. Needs UI testing."
+
+  - task: "Advanced Heap Visualization with Min/Max Dual View"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/components/AdvancedHeapVisualization.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Complete rewrite with min/max heap toggle, dual heap side-by-side comparison, heapify step-by-step animation with play/pause/next/previous controls, array representation with parent/child indices, and detailed complexity information. Needs UI testing."
+
+  - task: "Remove AnimatedPathfinder Component"
+    implemented: true
+    working: true
+    file: "frontend/src/components/Dashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Removed AnimatedPathfinder.js component and all references from Dashboard. Kept PathfindingVisualizer intact as requested."
+
   - task: "Operation Control Panel (Animation Speed, Educational Mode, Execution Mode)"
     implemented: true
     working: true
