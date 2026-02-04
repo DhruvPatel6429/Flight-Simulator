@@ -504,80 +504,22 @@ export const Dashboard = () => {
 
               {showDSAInfo && (
                 <div className="mb-4 p-4 bg-aviation-bg border border-dsa-graph rounded-lg">
-                  <h3 className="font-heading font-bold text-dsa-graph mb-2">Data Structure: Hash Table (Separate Chaining)</h3>
-                  <p className="text-sm text-aviation-text-secondary mb-2">Uses hash function to map ticket IDs to buckets. Collisions handled via linked lists.</p>
+                  <h3 className="font-heading font-bold text-dsa-graph mb-2">Data Structure: Hash Table (Advanced)</h3>
+                  <p className="text-sm text-aviation-text-secondary mb-2">Multiple collision resolution methods with dynamic resizing and load factor monitoring.</p>
                   <div className="text-xs font-mono text-aviation-text-secondary">
-                    <div>• Insert: O(1) average, O(n) worst case</div>
-                    <div>• Search: O(1) average, O(n) worst case</div>
-                    <div>• Delete: O(1) average, O(n) worst case</div>
+                    <div>• Methods: Separate Chaining, Linear Probing, Quadratic Probing, Double Hashing</div>
+                    <div>• Dynamic Resizing: Triggers when load factor α > 0.75</div>
+                    <div>• Collision Analysis: Real-time collision counting</div>
                   </div>
                 </div>
               )}
 
-              <div id="hash-section" className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <div className="lg:col-span-3">
-                  <EnhancedHashTableVisualization 
-                    passengers={passengers}
-                    animationSpeed={animationSpeed}
-                    showSteps={showDSAInfo}
-                    stepMode={stepMode}
-                  />
-                </div>
-
-                <div className="space-y-4">
-                  <div className="bg-aviation-bg border border-aviation-border rounded-lg p-4">
-                    <h3 className="font-heading font-bold text-aviation-text-primary mb-3">Add Passenger</h3>
-                    <div className="space-y-2">
-                      <Input 
-                        placeholder="Name" 
-                        value={newPassenger.name}
-                        onChange={(e) => setNewPassenger({...newPassenger, name: e.target.value})}
-                        className="bg-aviation-surface border-aviation-border"
-                        data-testid="input-passenger-name"
-                      />
-                      <Input 
-                        placeholder="Passport" 
-                        value={newPassenger.passport}
-                        onChange={(e) => setNewPassenger({...newPassenger, passport: e.target.value})}
-                        className="bg-aviation-surface border-aviation-border"
-                        data-testid="input-passenger-passport"
-                      />
-                      <Input 
-                        placeholder="Flight ID" 
-                        value={newPassenger.flight_id}
-                        onChange={(e) => setNewPassenger({...newPassenger, flight_id: e.target.value})}
-                        className="bg-aviation-surface border-aviation-border"
-                        data-testid="input-passenger-flight"
-                      />
-                      <Input 
-                        placeholder="Seat Number" 
-                        value={newPassenger.seat_number}
-                        onChange={(e) => setNewPassenger({...newPassenger, seat_number: e.target.value})}
-                        className="bg-aviation-surface border-aviation-border"
-                        data-testid="input-passenger-seat"
-                      />
-                      <Button onClick={addPassenger} className="w-full bg-dsa-graph hover:bg-dsa-graph/80" data-testid="btn-add-passenger">
-                        Add Passenger
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="bg-aviation-bg border border-aviation-border rounded-lg p-4">
-                    <h3 className="font-heading font-bold text-aviation-text-primary mb-3">Search Passenger</h3>
-                    <div className="space-y-2">
-                      <Input 
-                        placeholder="Ticket ID" 
-                        value={searchTicket}
-                        onChange={(e) => setSearchTicket(e.target.value)}
-                        className="bg-aviation-surface border-aviation-border"
-                        data-testid="input-search-ticket"
-                      />
-                      <Button onClick={searchPassenger} className="w-full bg-dsa-graph hover:bg-dsa-graph/80" data-testid="btn-search-passenger">
-                        Search
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+              <div id="hash-section">
+                <AdvancedHashTableVisualization 
+                  animationSpeed={animationSpeed}
+                  showSteps={showDSAInfo}
+                  stepMode={stepMode}
+                />
               </div>
             </Card>
 
