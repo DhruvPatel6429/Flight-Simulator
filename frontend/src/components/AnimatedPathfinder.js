@@ -324,6 +324,24 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
                 <Play className="w-4 h-4 mr-2" />
                 Start
               </Button>
+            ) : stepMode ? (
+              <>
+                <Button
+                  onClick={previousStep}
+                  disabled={currentStepIndex === 0}
+                  variant="outline"
+                  className="border-aviation-border"
+                >
+                  ← Previous
+                </Button>
+                <Button
+                  onClick={nextStep}
+                  disabled={currentStepIndex >= allSteps.length - 1}
+                  className="flex-1 bg-aviation-accent hover:bg-aviation-accent/80"
+                >
+                  Next →
+                </Button>
+              </>
             ) : (
               <Button
                 onClick={() => setIsPaused(!isPaused)}
