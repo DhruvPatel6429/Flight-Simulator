@@ -442,12 +442,19 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
           <div className="flex items-center justify-between p-4 bg-aviation-bg border border-aviation-border rounded-lg">
             <div className="text-sm text-aviation-text-secondary">
               Step <span className="text-aviation-text-primary font-bold">{currentStep}</span>
+              {stepMode && allSteps.length > 0 && (
+                <span className="text-aviation-text-secondary"> of {allSteps.length}</span>
+              )}
             </div>
             <div className="text-sm text-aviation-text-secondary">
               Algorithm: <span className="text-aviation-accent font-bold">{algorithm.toUpperCase()}</span>
             </div>
             <div className="text-sm text-aviation-text-secondary">
-              Speed: <span className="text-aviation-text-primary font-bold">{animationSpeed}</span>
+              {stepMode ? (
+                <span className="text-blue-400 font-bold">▶️ Step Mode</span>
+              ) : (
+                <>Speed: <span className="text-aviation-text-primary font-bold">{animationSpeed}</span></>
+              )}
             </div>
           </div>
         )}
