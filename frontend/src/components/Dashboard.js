@@ -703,6 +703,14 @@ export const Dashboard = () => {
                 </div>
               </div>
             </Card>
+
+            {/* DSA Complexity & Code for Stack */}
+            {showDSAInfo && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <DSAComplexityTooltip dataStructure="stack" show={showDSAInfo} />
+                <CodeViewer algorithm="stack" language="c" />
+              </div>
+            )}
           </TabsContent>
 
           {/* Heap Tab */}
