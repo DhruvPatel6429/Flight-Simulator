@@ -497,23 +497,158 @@ async def get_cancellations():
     cancellations = await db.cancellations.find({}, {"_id": 0}, sort=[("timestamp", -1)]).to_list(1000)
     return cancellations
 
-# Flight Scheduler (Min Heap) APIs
+# Flight Scheduler (Heap) APIs
 @api_router.get("/scheduler/heap")
-async def get_flight_heap():
+async def get_flight_heap(heap_type: str = "min"):
+    """
+    Get flight heap - min heap (earliest flights) or max heap (latest flights)
+    heap_type: 'min' or 'max'
+    """
     flights = await db.flights.find({}, {"_id": 0}).to_list(1000)
     
-    heap_data = []
+    if heap_type == "min":
+        heap_data = []
+        for flight in flights:
+            heap_data.append((flight['departure_time'], flight))
+        
+        heapq.heapify(heap_data)
+        
+        result = []
+        while heap_data:
+            time, flight = heapq.heappop(heap_data)
+            result.append(flight)
+        
+        return {"type": "min", "flights": result}
+    
+    elif heap_type == "max":
+        # Use negative priority for max heap
+        heap_data = []
+        for flight in flights:
+            # Negate the time string comparison by using negative tuple
+            heap_data.append((-hash(flight['departure_time']), flight['departure_time'], flight))
+        
+        heapq.heapify(heap_data)
+        
+        result = []
+        while heap_data:
+            _, time, flight = heapq.heappop(heap_data)
+            result.insert(0, flight)  # Insert at beginning to reverse order
+        
+        return {"type": "max", "flights": result}
+    
+    else:
+        raise HTTPException(status_code=400, detail="Invalid heap type. Use 'min' or 'max'")
+
+@api_router.post("/scheduler/heapify")
+async def heapify_flights():
+    """
+    Demonstrate heapify process step-by-step
+    Returns array representation and tree structure at each step
+    """
+    flights = await db.flights.find({}, {"_id": 0}).to_list(1000)
+    
+    if len(flights) == 0:
+        return {"steps": [], "final_heap": []}
+    
+    # Create initial array
+    flight_array = [(f['departure_time'], f) for f in flights]
+    steps = []
+    
+    # Step 0: Initial unsorted array
+    steps.append({
+        "step": 0,
+        "description": "Initial unsorted array",
+        "array": [f[1] for f in flight_array],
+        "comparisons": []
+    })
+    
+    # Heapify process
+    n = len(flight_array)
+    
+    # Start from last non-leaf node
+    for i in range(n // 2 - 1, -1, -1):
+        # Create a copy for this iteration
+        temp_array = flight_array.copy()
+        comparisons = []
+        
+        # Heapify subtree rooted at index i
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+        
+        if left < n:
+            comparisons.append({
+                "indices": [largest, left],
+                "values": [temp_array[largest][0], temp_array[left][0]]
+            })
+            if temp_array[left][0] < temp_array[largest][0]:
+                largest = left
+        
+        if right < n:
+            comparisons.append({
+                "indices": [largest, right],
+                "values": [temp_array[largest][0], temp_array[right][0]]
+            })
+            if temp_array[right][0] < temp_array[largest][0]:
+                largest = right
+        
+        if largest != i:
+            temp_array[i], temp_array[largest] = temp_array[largest], temp_array[i]
+            flight_array = temp_array
+            
+            steps.append({
+                "step": len(steps),
+                "description": f"Heapify node at index {i}, swap with {largest}",
+                "array": [f[1] for f in flight_array],
+                "swapped_indices": [i, largest],
+                "comparisons": comparisons
+            })
+    
+    # Final heapified array
+    heapq.heapify(flight_array)
+    
+    return {
+        "steps": steps,
+        "final_heap": [f[1] for f in flight_array],
+        "total_steps": len(steps)
+    }
+
+@api_router.get("/scheduler/dual-heap")
+async def get_dual_heap():
+    """
+    Get both min and max heaps side by side for comparison
+    """
+    flights = await db.flights.find({}, {"_id": 0}).to_list(1000)
+    
+    # Min heap
+    min_heap_data = []
     for flight in flights:
-        heap_data.append((flight['departure_time'], flight))
+        min_heap_data.append((flight['departure_time'], flight))
+    heapq.heapify(min_heap_data)
+    min_result = []
+    while min_heap_data:
+        time, flight = heapq.heappop(min_heap_data)
+        min_result.append(flight)
     
-    heapq.heapify(heap_data)
+    # Max heap (sorted in reverse)
+    max_result = sorted(flights, key=lambda x: x['departure_time'], reverse=True)
     
-    result = []
-    while heap_data:
-        time, flight = heapq.heappop(heap_data)
-        result.append(flight)
-    
-    return result
+    return {
+        "min_heap": {
+            "type": "min",
+            "root": min_result[0] if min_result else None,
+            "flights": min_result
+        },
+        "max_heap": {
+            "type": "max",
+            "root": max_result[0] if max_result else None,
+            "flights": max_result
+        },
+        "comparison": {
+            "earliest_flight": min_result[0] if min_result else None,
+            "latest_flight": max_result[0] if max_result else None
+        }
+    }
 
 # Analytics API
 @api_router.get("/analytics", response_model=Analytics)
