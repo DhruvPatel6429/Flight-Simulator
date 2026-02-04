@@ -335,6 +335,370 @@ char* search(HashTable* ht, char* key) {
   }
 }`
     },
+    stack: {
+      c: `#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define MAX 100
+
+// Stack structure for cancellation management
+typedef struct {
+    char* data[MAX];
+    int top;
+} Stack;
+
+void initStack(Stack* s) {
+    s->top = -1;
+}
+
+bool isEmpty(Stack* s) {
+    return s->top == -1;
+}
+
+bool isFull(Stack* s) {
+    return s->top == MAX - 1;
+}
+
+// Push element to stack
+void push(Stack* s, char* item) {
+    if (isFull(s)) {
+        printf("Stack Overflow!\\n");
+        return;
+    }
+    s->data[++s->top] = item;
+    printf("Pushed: %s\\n", item);
+}
+
+// Pop element from stack
+char* pop(Stack* s) {
+    if (isEmpty(s)) {
+        printf("Stack Underflow!\\n");
+        return NULL;
+    }
+    char* item = s->data[s->top--];
+    printf("Popped: %s\\n", item);
+    return item;
+}
+
+// Peek top element
+char* peek(Stack* s) {
+    if (isEmpty(s)) {
+        return NULL;
+    }
+    return s->data[s->top];
+}
+
+// Display stack contents (LIFO order)
+void displayStack(Stack* s) {
+    if (isEmpty(s)) {
+        printf("Stack is empty\\n");
+        return;
+    }
+    
+    printf("Stack (Top -> Bottom): ");
+    for (int i = s->top; i >= 0; i--) {
+        printf("%s ", s->data[i]);
+    }
+    printf("\\n");
+}`,
+      python: `class Stack:
+    def __init__(self):
+        self.items = []
+    
+    def is_empty(self):
+        return len(self.items) == 0
+    
+    def push(self, item):
+        """Add item to top of stack"""
+        self.items.append(item)
+    
+    def pop(self):
+        """Remove and return top item"""
+        if self.is_empty():
+            raise IndexError("Pop from empty stack")
+        return self.items.pop()
+    
+    def peek(self):
+        """Return top item without removing"""
+        if self.is_empty():
+            return None
+        return self.items[-1]
+    
+    def size(self):
+        return len(self.items)
+    
+    def display(self):
+        """Display stack from top to bottom"""
+        if self.is_empty():
+            print("Stack is empty")
+            return
+        print("Stack (Top -> Bottom):", self.items[::-1])`,
+      javascript: `class Stack {
+  constructor() {
+    this.items = [];
+  }
+  
+  isEmpty() {
+    return this.items.length === 0;
+  }
+  
+  push(item) {
+    // Add item to top of stack
+    this.items.push(item);
+  }
+  
+  pop() {
+    // Remove and return top item
+    if (this.isEmpty()) {
+      throw new Error('Stack underflow');
+    }
+    return this.items.pop();
+  }
+  
+  peek() {
+    // Return top item without removing
+    if (this.isEmpty()) {
+      return null;
+    }
+    return this.items[this.items.length - 1];
+  }
+  
+  size() {
+    return this.items.length;
+  }
+  
+  display() {
+    // Display stack from top to bottom
+    if (this.isEmpty()) {
+      console.log('Stack is empty');
+      return;
+    }
+    console.log('Stack (Top -> Bottom):', [...this.items].reverse());
+  }
+}`
+    },
+    queue: {
+      c: `#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define MAX 100
+
+// Circular Queue structure for boarding management
+typedef struct {
+    char* data[MAX];
+    int front;
+    int rear;
+    int size;
+} CircularQueue;
+
+void initQueue(CircularQueue* q) {
+    q->front = -1;
+    q->rear = -1;
+    q->size = 0;
+}
+
+bool isEmpty(CircularQueue* q) {
+    return q->size == 0;
+}
+
+bool isFull(CircularQueue* q) {
+    return q->size == MAX;
+}
+
+// Enqueue element to circular queue
+void enqueue(CircularQueue* q, char* item) {
+    if (isFull(q)) {
+        printf("Queue Overflow!\\n");
+        return;
+    }
+    
+    if (isEmpty(q)) {
+        q->front = 0;
+    }
+    
+    q->rear = (q->rear + 1) % MAX;
+    q->data[q->rear] = item;
+    q->size++;
+    printf("Enqueued: %s\\n", item);
+}
+
+// Dequeue element from circular queue
+char* dequeue(CircularQueue* q) {
+    if (isEmpty(q)) {
+        printf("Queue Underflow!\\n");
+        return NULL;
+    }
+    
+    char* item = q->data[q->front];
+    if (q->front == q->rear) {
+        // Last element
+        q->front = -1;
+        q->rear = -1;
+    } else {
+        q->front = (q->front + 1) % MAX;
+    }
+    q->size--;
+    printf("Dequeued: %s\\n", item);
+    return item;
+}
+
+// Peek front element
+char* peek(CircularQueue* q) {
+    if (isEmpty(q)) {
+        return NULL;
+    }
+    return q->data[q->front];
+}
+
+// Display queue contents (FIFO order)
+void displayQueue(CircularQueue* q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty\\n");
+        return;
+    }
+    
+    printf("Queue (Front -> Rear): ");
+    int i = q->front;
+    for (int count = 0; count < q->size; count++) {
+        printf("%s ", q->data[i]);
+        i = (i + 1) % MAX;
+    }
+    printf("\\n");
+}`,
+      python: `class CircularQueue:
+    def __init__(self, capacity=100):
+        self.capacity = capacity
+        self.queue = [None] * capacity
+        self.front = -1
+        self.rear = -1
+        self.size = 0
+    
+    def is_empty(self):
+        return self.size == 0
+    
+    def is_full(self):
+        return self.size == self.capacity
+    
+    def enqueue(self, item):
+        """Add item to rear of queue"""
+        if self.is_full():
+            raise OverflowError("Queue is full")
+        
+        if self.is_empty():
+            self.front = 0
+        
+        self.rear = (self.rear + 1) % self.capacity
+        self.queue[self.rear] = item
+        self.size += 1
+    
+    def dequeue(self):
+        """Remove and return front item"""
+        if self.is_empty():
+            raise IndexError("Queue is empty")
+        
+        item = self.queue[self.front]
+        if self.front == self.rear:
+            # Last element
+            self.front = -1
+            self.rear = -1
+        else:
+            self.front = (self.front + 1) % self.capacity
+        self.size -= 1
+        return item
+    
+    def peek(self):
+        """Return front item without removing"""
+        if self.is_empty():
+            return None
+        return self.queue[self.front]
+    
+    def display(self):
+        """Display queue from front to rear"""
+        if self.is_empty():
+            print("Queue is empty")
+            return
+        
+        items = []
+        i = self.front
+        for _ in range(self.size):
+            items.append(self.queue[i])
+            i = (i + 1) % self.capacity
+        print("Queue (Front -> Rear):", items)`,
+      javascript: `class CircularQueue {
+  constructor(capacity = 100) {
+    this.capacity = capacity;
+    this.queue = new Array(capacity);
+    this.front = -1;
+    this.rear = -1;
+    this.size = 0;
+  }
+  
+  isEmpty() {
+    return this.size === 0;
+  }
+  
+  isFull() {
+    return this.size === this.capacity;
+  }
+  
+  enqueue(item) {
+    // Add item to rear of queue
+    if (this.isFull()) {
+      throw new Error('Queue overflow');
+    }
+    
+    if (this.isEmpty()) {
+      this.front = 0;
+    }
+    
+    this.rear = (this.rear + 1) % this.capacity;
+    this.queue[this.rear] = item;
+    this.size++;
+  }
+  
+  dequeue() {
+    // Remove and return front item
+    if (this.isEmpty()) {
+      throw new Error('Queue underflow');
+    }
+    
+    const item = this.queue[this.front];
+    if (this.front === this.rear) {
+      // Last element
+      this.front = -1;
+      this.rear = -1;
+    } else {
+      this.front = (this.front + 1) % this.capacity;
+    }
+    this.size--;
+    return item;
+  }
+  
+  peek() {
+    // Return front item without removing
+    if (this.isEmpty()) {
+      return null;
+    }
+    return this.queue[this.front];
+  }
+  
+  display() {
+    // Display queue from front to rear
+    if (this.isEmpty()) {
+      console.log('Queue is empty');
+      return;
+    }
+    
+    const items = [];
+    let i = this.front;
+    for (let count = 0; count < this.size; count++) {
+      items.push(this.queue[i]);
+      i = (i + 1) % this.capacity;
+    }
+    console.log('Queue (Front -> Rear):', items);
+  }
+}`
+    },
     heap: {
       c: `#include <stdio.h>
 #include <stdlib.h>
