@@ -372,6 +372,9 @@ frontend:
       - working: true
         agent: "main"
         comment: "Added complete C code implementations for BFS, DFS, Hash Table, and Heap algorithms. Added language selector (C/Python/JS). Default language changed to C."
+      - working: true
+        agent: "main"
+        comment: "Added C code implementations for Stack (LIFO) and Circular Queue (FIFO) data structures. Now includes complete C/Python/JavaScript code for all 6 algorithms: BFS, DFS, Hash Table, Heap, Stack, and Queue."
 
   - task: "Dashboard Integration with Enhanced Components"
     implemented: true
