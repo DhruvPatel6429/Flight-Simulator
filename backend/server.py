@@ -223,16 +223,173 @@ async def search_passenger(ticket_id: str):
     return passenger
 
 @api_router.get("/passengers/hash-table")
-async def get_hash_table():
+async def get_hash_table(method: str = "separate_chaining", table_size: int = 10):
+    """
+    Get hash table with different collision resolution methods
+    Methods: separate_chaining, linear_probing, quadratic_probing, double_hashing
+    """
     passengers = await db.passengers.find({}, {"_id": 0}).to_list(1000)
-    table_size = 10
-    hash_table = {i: [] for i in range(table_size)}
     
+    load_factor = calculate_load_factor(len(passengers), table_size)
+    collision_count = 0
+    
+    if method == "separate_chaining":
+        hash_table = {i: [] for i in range(table_size)}
+        for passenger in passengers:
+            hash_val = generate_hash(passenger['ticket_id'], table_size)
+            if len(hash_table[hash_val]) > 0:
+                collision_count += 1
+            hash_table[hash_val].append(passenger)
+        
+        return {
+            "method": method,
+            "table_size": table_size,
+            "num_items": len(passengers),
+            "load_factor": round(load_factor, 3),
+            "collision_count": collision_count,
+            "table": hash_table,
+            "needs_resize": load_factor > 0.75
+        }
+    
+    elif method == "linear_probing":
+        hash_table = {i: None for i in range(table_size)}
+        probe_sequences = {}
+        
+        for passenger in passengers:
+            hash_val = generate_hash(passenger['ticket_id'], table_size)
+            original_hash = hash_val
+            probe_sequence = [hash_val]
+            probes = 0
+            
+            while hash_table[hash_val] is not None and probes < table_size:
+                collision_count += 1
+                hash_val = (hash_val + 1) % table_size
+                probe_sequence.append(hash_val)
+                probes += 1
+            
+            if hash_table[hash_val] is None:
+                hash_table[hash_val] = passenger
+                probe_sequences[passenger['ticket_id']] = probe_sequence
+        
+        return {
+            "method": method,
+            "table_size": table_size,
+            "num_items": len(passengers),
+            "load_factor": round(load_factor, 3),
+            "collision_count": collision_count,
+            "table": hash_table,
+            "probe_sequences": probe_sequences,
+            "needs_resize": load_factor > 0.75
+        }
+    
+    elif method == "quadratic_probing":
+        hash_table = {i: None for i in range(table_size)}
+        probe_sequences = {}
+        
+        for passenger in passengers:
+            hash_val = generate_hash(passenger['ticket_id'], table_size)
+            original_hash = hash_val
+            probe_sequence = [hash_val]
+            probes = 0
+            
+            while hash_table[hash_val] is not None and probes < table_size:
+                collision_count += 1
+                probes += 1
+                hash_val = (original_hash + probes * probes) % table_size
+                probe_sequence.append(hash_val)
+            
+            if hash_table[hash_val] is None:
+                hash_table[hash_val] = passenger
+                probe_sequences[passenger['ticket_id']] = probe_sequence
+        
+        return {
+            "method": method,
+            "table_size": table_size,
+            "num_items": len(passengers),
+            "load_factor": round(load_factor, 3),
+            "collision_count": collision_count,
+            "table": hash_table,
+            "probe_sequences": probe_sequences,
+            "needs_resize": load_factor > 0.75
+        }
+    
+    elif method == "double_hashing":
+        hash_table = {i: None for i in range(table_size)}
+        probe_sequences = {}
+        
+        for passenger in passengers:
+            hash_val = generate_hash(passenger['ticket_id'], table_size)
+            hash2_val = generate_hash2(passenger['ticket_id'], table_size)
+            original_hash = hash_val
+            probe_sequence = [hash_val]
+            probes = 0
+            
+            while hash_table[hash_val] is not None and probes < table_size:
+                collision_count += 1
+                probes += 1
+                hash_val = (original_hash + probes * hash2_val) % table_size
+                probe_sequence.append(hash_val)
+            
+            if hash_table[hash_val] is None:
+                hash_table[hash_val] = passenger
+                probe_sequences[passenger['ticket_id']] = probe_sequence
+        
+        return {
+            "method": method,
+            "table_size": table_size,
+            "num_items": len(passengers),
+            "load_factor": round(load_factor, 3),
+            "collision_count": collision_count,
+            "table": hash_table,
+            "probe_sequences": probe_sequences,
+            "needs_resize": load_factor > 0.75
+        }
+    
+    else:
+        raise HTTPException(status_code=400, detail="Invalid collision method")
+
+@api_router.post("/passengers/hash-table/rehash")
+async def rehash_table(old_size: int = 10, new_size: int = 20):
+    """
+    Simulate rehashing with animation data
+    Returns old table, new table, and mapping of items being moved
+    """
+    passengers = await db.passengers.find({}, {"_id": 0}).to_list(1000)
+    
+    # Old hash table
+    old_table = {i: [] for i in range(old_size)}
     for passenger in passengers:
-        hash_val = generate_hash(passenger['ticket_id'], table_size)
-        hash_table[hash_val].append(passenger)
+        hash_val = generate_hash(passenger['ticket_id'], old_size)
+        old_table[hash_val].append(passenger)
     
-    return hash_table
+    # New hash table
+    new_table = {i: [] for i in range(new_size)}
+    rehash_movements = []
+    
+    for old_index, items in old_table.items():
+        for passenger in items:
+            new_hash = generate_hash(passenger['ticket_id'], new_size)
+            new_table[new_hash].append(passenger)
+            rehash_movements.append({
+                "ticket_id": passenger['ticket_id'],
+                "from_index": old_index,
+                "to_index": new_hash,
+                "passenger": passenger
+            })
+    
+    old_load_factor = calculate_load_factor(len(passengers), old_size)
+    new_load_factor = calculate_load_factor(len(passengers), new_size)
+    
+    return {
+        "old_table": old_table,
+        "new_table": new_table,
+        "old_size": old_size,
+        "new_size": new_size,
+        "old_load_factor": round(old_load_factor, 3),
+        "new_load_factor": round(new_load_factor, 3),
+        "movements": rehash_movements,
+        "num_items": len(passengers)
+    }
 
 # Boarding Queue APIs
 @api_router.post("/boarding-queue/{flight_id}/enqueue")
