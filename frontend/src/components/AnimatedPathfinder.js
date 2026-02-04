@@ -14,7 +14,7 @@ const ANIMATION_SPEEDS = {
   fast: 200
 };
 
-export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal', showEducational = false }) => {
+export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal', showEducational = false, stepMode = false }) => {
   const [startAirport, setStartAirport] = useState('');
   const [endAirport, setEndAirport] = useState('');
   const [algorithm, setAlgorithm] = useState('bfs');
@@ -26,7 +26,11 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
   const [path, setPath] = useState([]);
   const [queue, setQueue] = useState([]);
   const [adjacencyList, setAdjacencyList] = useState({});
+  const [allSteps, setAllSteps] = useState([]);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const animationRef = useRef(null);
+  const isPausedRef = useRef(false);
+  const isAnimatingRef = useRef(false);
 
   useEffect(() => {
     // Build adjacency list
