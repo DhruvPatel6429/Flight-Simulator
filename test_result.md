@@ -228,6 +228,18 @@ backend:
         agent: "main"
         comment: "Real-time analytics for airports, flights, tickets, and passenger statuses."
 
+  - task: "Passenger Database View with Add/Search Forms and Export PNG"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/components/PassengerDatabaseView.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created new dedicated Passenger Database view matching screenshot requirements. Features: Add Passenger form (Name, Passport, Flight ID, Seat Number), Search Passenger by Ticket ID, Export PNG functionality, clean layout with hash table visualization on left and forms on right, status colors (Pending-Blue, Boarded-Green, Cancelled-Red), collision indicators. Needs UI testing."
+
 frontend:
   - task: "Enhanced Graph Visualization with BFS/DFS Traversal"
     implemented: true
