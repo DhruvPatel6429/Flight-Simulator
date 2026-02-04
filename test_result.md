@@ -309,7 +309,7 @@ frontend:
 
   - task: "Advanced Heap Visualization with Min/Max Dual View"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/components/AdvancedHeapVisualization.js"
     stuck_count: 0
     priority: "high"
@@ -318,6 +318,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Complete rewrite with min/max heap toggle, dual heap side-by-side comparison, heapify step-by-step animation with play/pause/next/previous controls, array representation with parent/child indices, and detailed complexity information. Needs UI testing."
+      - working: true
+        agent: "main"
+        comment: "Fixed heap tree visualization to show proper binary tree structure with SVG lines connecting parent nodes to their children. No more straight lines - now displays as an actual tree!"
 
   - task: "Remove AnimatedPathfinder Component"
     implemented: true
