@@ -464,6 +464,35 @@ export const Dashboard = () => {
                 </div>
               </div>
             </Card>
+
+            {/* Animated Pathfinder Section */}
+            <AnimatedPathfinder 
+              airports={airports}
+              flights={flights}
+              animationSpeed={animationSpeed}
+              showEducational={showDSAInfo}
+            />
+
+            {/* Pathfinding Visualizer (Comparison) */}
+            <PathfindingVisualizer airports={airports} />
+
+            {/* DSA Complexity Information */}
+            {showDSAInfo && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <DSAComplexityTooltip dataStructure="graph" show={showDSAInfo} />
+                <CodeViewer algorithm="bfs" language="python" />
+              </div>
+            )}
+
+            {/* Analytics Charts */}
+            {detailedAnalytics && (
+              <div>
+                <h3 className="text-2xl font-heading font-bold text-aviation-text-primary mb-4">
+                  📊 Advanced Analytics
+                </h3>
+                <AnalyticsCharts detailedAnalytics={detailedAnalytics} />
+              </div>
+            )}
           </TabsContent>
 
           {/* Hash Table Tab */}
