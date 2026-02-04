@@ -108,8 +108,10 @@ user_problem_statement: |
   The system must visually demonstrate the real-world application of core DSA concepts with enhanced
   animations, step-by-step visualizations, and professional UI/UX suitable for academic presentation.
   
-  Recent update: Fix Animated Pathfinding and Pathfinding Algorithms not working properly. Fix execution 
-  mode not working for all Data structures. Change code from Python to C.
+  Latest update (Current): Remove AnimatedPathfinder component and add advanced data structure features:
+  - Hash Table: Dynamic resizing, collision method comparison (separate chaining, linear probing, 
+    quadratic probing, double hashing), load factor monitoring
+  - Heap: Min/Max dual view, heapify animation with step-by-step process, array representation
 
 backend:
   - task: "Airport Network API (Graph - Adjacency List)"
