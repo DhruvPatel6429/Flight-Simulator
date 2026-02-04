@@ -107,6 +107,9 @@ user_problem_statement: |
   as a full-stack interactive dashboard for Data Structures & Algorithms laboratory evaluation.
   The system must visually demonstrate the real-world application of core DSA concepts with enhanced
   animations, step-by-step visualizations, and professional UI/UX suitable for academic presentation.
+  
+  Recent update: Fix Animated Pathfinding and Pathfinding Algorithms not working properly. Fix execution 
+  mode not working for all Data structures. Change code from Python to C.
 
 backend:
   - task: "Airport Network API (Graph - Adjacency List)"
