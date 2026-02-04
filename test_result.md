@@ -108,10 +108,16 @@ user_problem_statement: |
   The system must visually demonstrate the real-world application of core DSA concepts with enhanced
   animations, step-by-step visualizations, and professional UI/UX suitable for academic presentation.
   
-  Latest update (Current): Remove AnimatedPathfinder component and add advanced data structure features:
-  - Hash Table: Dynamic resizing, collision method comparison (separate chaining, linear probing, 
-    quadratic probing, double hashing), load factor monitoring
-  - Heap: Min/Max dual view, heapify animation with step-by-step process, array representation
+  Latest update (Current): UI/UX improvements and new features:
+  1. Fixed hashtable visualization - cleaner layout, better collision display
+  2. Fixed heap visualization - proper tree structure with connecting lines (not straight lines)
+  3. Added C code for Stack and Queue in CodeViewer (alongside existing BFS, DFS, HashTable, Heap)
+  4. Created "Let's Explore" guided tour feature for all 5 data structures with:
+     - Step-by-step navigation through Graph, Hash Table, Queue, Stack, Heap
+     - Auto-play mode
+     - Educational content and real-world applications
+     - Direct tab navigation
+     - Progress tracking
 
 backend:
   - task: "Airport Network API (Graph - Adjacency List)"
