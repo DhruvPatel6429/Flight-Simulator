@@ -723,6 +723,7 @@ export const Dashboard = () => {
                     stack={cancellations}
                     animationSpeed={animationSpeed}
                     showSteps={showDSAInfo}
+                    stepMode={stepMode}
                   />
                 </div>
 
