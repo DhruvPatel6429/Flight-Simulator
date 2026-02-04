@@ -374,7 +374,7 @@ export const PassengerDatabaseView = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-aviation-text-secondary">Name:</span>
                       <span className="text-sm text-aviation-text-primary">
-                        {searchResult.passenger_name}
+                        {searchResult.name}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
