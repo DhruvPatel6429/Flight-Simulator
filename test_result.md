@@ -174,6 +174,42 @@ backend:
         agent: "main"
         comment: "Min heap endpoint returns flights sorted by departure time."
 
+  - task: "Advanced Hash Table API with Multiple Collision Methods"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added support for separate_chaining, linear_probing, quadratic_probing, and double_hashing collision resolution methods. Includes load factor calculation and collision counting."
+
+  - task: "Hash Table Dynamic Resizing/Rehashing API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "API endpoint for dynamic resizing with rehashing animation data. Returns old table, new table, and movement tracking for visualization."
+
+  - task: "Advanced Heap APIs (Min/Max/Dual/Heapify)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Extended heap API with min/max heap support, dual heap comparison, and heapify step-by-step animation data."
+
   - task: "Analytics Dashboard API"
     implemented: true
     working: true
