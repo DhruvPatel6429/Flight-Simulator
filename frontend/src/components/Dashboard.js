@@ -10,7 +10,6 @@ import { BulkOperationsDialog } from './BulkOperationsDialog';
 import { ImportExportDialog } from './ImportExportDialog';
 import { AnalyticsCharts } from './AnalyticsCharts';
 import { PathfindingVisualizer } from './PathfindingVisualizer';
-import { AnimatedPathfinder } from './AnimatedPathfinder';
 import { DSAComplexityTooltip } from './DSAComplexityTooltip';
 import { CodeViewer } from './CodeViewer';
 import { Button } from './ui/button';
@@ -465,15 +464,6 @@ export const Dashboard = () => {
                 </div>
               </div>
             </Card>
-
-            {/* Animated Pathfinder Section */}
-            <AnimatedPathfinder 
-              airports={airports}
-              flights={flights}
-              animationSpeed={animationSpeed}
-              showEducational={showDSAInfo}
-              stepMode={stepMode}
-            />
 
             {/* Pathfinding Visualizer (Comparison) */}
             <PathfindingVisualizer airports={airports} />
