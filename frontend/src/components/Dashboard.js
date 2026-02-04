@@ -313,6 +313,14 @@ export const Dashboard = () => {
           {/* System Controls */}
           <Card className="lg:col-span-3 bg-aviation-surface border-aviation-border p-4">
             <div className="flex flex-wrap gap-3 items-center">
+              <Button 
+                onClick={() => setShowExploreModal(true)} 
+                className="bg-aviation-accent hover:bg-aviation-accent-hover font-bold"
+                data-testid="btn-explore-tour"
+              >
+                🎓 Let's Explore!
+              </Button>
+              <div className="h-8 w-px bg-aviation-border"></div>
               <Button onClick={initializeData} disabled={loading} className="bg-dsa-graph hover:bg-dsa-graph/80" data-testid="btn-initialize-data">
                 📊 Initialize Sample Data
               </Button>
