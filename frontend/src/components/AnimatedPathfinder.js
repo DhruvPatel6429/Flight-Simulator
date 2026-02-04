@@ -58,6 +58,9 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
   }, [airports, flights]);
 
   const resetAnimation = () => {
+    if (animationRef.current) {
+      clearTimeout(animationRef.current);
+    }
     setIsAnimating(false);
     setIsPaused(false);
     setCurrentStep(0);
@@ -65,8 +68,39 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
     setCurrentNode(null);
     setPath([]);
     setQueue([]);
-    if (animationRef.current) {
-      clearTimeout(animationRef.current);
+    setAllSteps([]);
+    setCurrentStepIndex(0);
+  };
+
+  const nextStep = () => {
+    if (currentStepIndex < allSteps.length - 1) {
+      const nextIndex = currentStepIndex + 1;
+      const step = allSteps[nextIndex];
+      setCurrentStepIndex(nextIndex);
+      setCurrentStep(nextIndex + 1);
+      setCurrentNode(step.node);
+      setQueue(step.queue || []);
+      setVisitedNodes(allSteps.slice(0, nextIndex + 1).map(s => s.node));
+      if (step.node === endAirport) {
+        setPath(step.path);
+      }
+    }
+  };
+
+  const previousStep = () => {
+    if (currentStepIndex > 0) {
+      const prevIndex = currentStepIndex - 1;
+      const step = allSteps[prevIndex];
+      setCurrentStepIndex(prevIndex);
+      setCurrentStep(prevIndex + 1);
+      setCurrentNode(step.node);
+      setQueue(step.queue || []);
+      setVisitedNodes(allSteps.slice(0, prevIndex + 1).map(s => s.node));
+      if (step.node === endAirport) {
+        setPath(step.path);
+      } else {
+        setPath([]);
+      }
     }
   };
 
