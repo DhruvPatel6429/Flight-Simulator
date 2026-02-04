@@ -197,6 +197,79 @@ bool dfsPath(int graph[MAX][MAX], int n, int current,
 }`
     },
     hashtable: {
+      c: `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define TABLE_SIZE 10
+
+// Hash table node for separate chaining
+typedef struct Node {
+    char* key;
+    char* value;
+    struct Node* next;
+} Node;
+
+typedef struct {
+    Node* table[TABLE_SIZE];
+} HashTable;
+
+// Hash function
+unsigned int hash(char* key) {
+    unsigned int hashVal = 0;
+    while (*key) {
+        hashVal = (hashVal * 31 + *key) % TABLE_SIZE;
+        key++;
+    }
+    return hashVal;
+}
+
+// Initialize hash table
+void initHashTable(HashTable* ht) {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        ht->table[i] = NULL;
+    }
+}
+
+// Insert into hash table with separate chaining
+void insert(HashTable* ht, char* key, char* value) {
+    unsigned int index = hash(key);
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->key = strdup(key);
+    newNode->value = strdup(value);
+    newNode->next = NULL;
+    
+    // Check if key exists
+    Node* current = ht->table[index];
+    while (current) {
+        if (strcmp(current->key, key) == 0) {
+            free(current->value);
+            current->value = strdup(value);
+            free(newNode->key);
+            free(newNode->value);
+            free(newNode);
+            return;
+        }
+        current = current->next;
+    }
+    
+    // Add at beginning of chain
+    newNode->next = ht->table[index];
+    ht->table[index] = newNode;
+}
+
+// Search in hash table
+char* search(HashTable* ht, char* key) {
+    unsigned int index = hash(key);
+    Node* current = ht->table[index];
+    
+    while (current) {
+        if (strcmp(current->key, key) == 0) {
+            return current->value;
+        }
+        current = current->next;
+    }
+    return NULL;  // Not found
+}`,
       python: `class HashTable:
     def __init__(self, size=10):
         self.size = size
