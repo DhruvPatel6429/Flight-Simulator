@@ -658,6 +658,7 @@ export const Dashboard = () => {
                       flightId={selectedFlight}
                       animationSpeed={animationSpeed}
                       showSteps={showDSAInfo}
+                      stepMode={stepMode}
                     />
                   )}
                 </div>
