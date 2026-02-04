@@ -411,11 +411,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Advanced Hash Table API with Multiple Collision Methods"
-    - "Hash Table Dynamic Resizing/Rehashing API"
-    - "Advanced Heap APIs (Min/Max/Dual/Heapify)"
     - "Advanced Hash Table Visualization with Collision Comparison"
     - "Advanced Heap Visualization with Min/Max Dual View"
+    - "Code Viewer with C Language Support"
+    - "Let's Explore Guided Tour Feature"
+    - "Dashboard Integration with Enhanced Components"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
