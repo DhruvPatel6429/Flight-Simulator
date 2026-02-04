@@ -336,6 +336,85 @@ char* search(HashTable* ht, char* key) {
 }`
     },
     heap: {
+      c: `#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+
+// Min Heap structure
+typedef struct {
+    int data[MAX];
+    int size;
+} MinHeap;
+
+void initHeap(MinHeap* heap) {
+    heap->size = 0;
+}
+
+int parent(int i) { return (i - 1) / 2; }
+int leftChild(int i) { return 2 * i + 1; }
+int rightChild(int i) { return 2 * i + 2; }
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Heapify up (for insert)
+void heapifyUp(MinHeap* heap, int i) {
+    while (i > 0 && heap->data[i] < heap->data[parent(i)]) {
+        swap(&heap->data[i], &heap->data[parent(i)]);
+        i = parent(i);
+    }
+}
+
+// Heapify down (for extract min)
+void heapifyDown(MinHeap* heap, int i) {
+    int minIndex = i;
+    int left = leftChild(i);
+    int right = rightChild(i);
+    
+    if (left < heap->size && 
+        heap->data[left] < heap->data[minIndex]) {
+        minIndex = left;
+    }
+    
+    if (right < heap->size && 
+        heap->data[right] < heap->data[minIndex]) {
+        minIndex = right;
+    }
+    
+    if (i != minIndex) {
+        swap(&heap->data[i], &heap->data[minIndex]);
+        heapifyDown(heap, minIndex);
+    }
+}
+
+// Insert element
+void insert(MinHeap* heap, int key) {
+    if (heap->size >= MAX) {
+        printf("Heap is full!\\n");
+        return;
+    }
+    heap->data[heap->size] = key;
+    heapifyUp(heap, heap->size);
+    heap->size++;
+}
+
+// Extract minimum element
+int extractMin(MinHeap* heap) {
+    if (heap->size == 0) {
+        printf("Heap is empty!\\n");
+        return -1;
+    }
+    
+    int min = heap->data[0];
+    heap->data[0] = heap->data[heap->size - 1];
+    heap->size--;
+    heapifyDown(heap, 0);
+    
+    return min;
+}`,
       python: `class MinHeap:
     def __init__(self):
         self.heap = []
