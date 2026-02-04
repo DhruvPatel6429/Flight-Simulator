@@ -14,6 +14,7 @@ import { AnalyticsCharts } from './AnalyticsCharts';
 import { PathfindingVisualizer } from './PathfindingVisualizer';
 import { DSAComplexityTooltip } from './DSAComplexityTooltip';
 import { CodeViewer } from './CodeViewer';
+import { ExploreFeature } from './ExploreFeature';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
