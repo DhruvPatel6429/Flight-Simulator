@@ -3,6 +3,7 @@ import axios from 'axios';
 import { EnhancedGraphVisualization } from './EnhancedGraphVisualization';
 import { EnhancedHashTableVisualization } from './EnhancedHashTableVisualization';
 import { AdvancedHashTableVisualization } from './AdvancedHashTableVisualization';
+import { PassengerDatabaseView } from './PassengerDatabaseView';
 import { EnhancedQueueVisualization } from './EnhancedQueueVisualization';
 import { EnhancedStackVisualization } from './EnhancedStackVisualization';
 import { EnhancedHeapVisualization } from './EnhancedHeapVisualization';
