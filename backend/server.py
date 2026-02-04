@@ -90,12 +90,25 @@ class Analytics(BaseModel):
     pending: int
     upcoming_flight: Optional[Dict] = None
 
-# Helper function to generate hash
+# Helper functions for hash table
 def generate_hash(value: str, table_size: int = 10) -> int:
+    """Primary hash function"""
     hash_val = 0
     for char in value:
         hash_val = (hash_val * 31 + ord(char)) % table_size
     return hash_val
+
+def generate_hash2(value: str, table_size: int = 10) -> int:
+    """Secondary hash function for double hashing"""
+    hash_val = 0
+    for char in value:
+        hash_val = (hash_val * 17 + ord(char)) % table_size
+    # Ensure it's never 0 for double hashing
+    return max(1, hash_val % (table_size - 1))
+
+def calculate_load_factor(num_items: int, table_size: int) -> float:
+    """Calculate load factor (α = n/m)"""
+    return num_items / table_size if table_size > 0 else 0
 
 # Airport APIs
 @api_router.post("/airports", response_model=Airport)
