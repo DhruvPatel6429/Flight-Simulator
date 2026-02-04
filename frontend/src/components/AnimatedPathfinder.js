@@ -33,6 +33,14 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
   const isAnimatingRef = useRef(false);
 
   useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
+
+  useEffect(() => {
+    isAnimatingRef.current = isAnimating;
+  }, [isAnimating]);
+
+  useEffect(() => {
     // Build adjacency list
     const adjList = {};
     airports.forEach(airport => {
