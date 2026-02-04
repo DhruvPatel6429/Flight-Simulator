@@ -109,6 +109,46 @@ void bfs(int graph[MAX][MAX], int n, int start) {
 }`
     },
     dfs: {
+      c: `#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define MAX 100
+
+bool visited[MAX];
+
+// DFS implementation using recursion
+void dfs(int graph[MAX][MAX], int n, int vertex) {
+    printf("%d ", vertex);
+    visited[vertex] = true;
+    
+    for (int i = 0; i < n; i++) {
+        if (graph[vertex][i] && !visited[i]) {
+            dfs(graph, n, i);
+        }
+    }
+}
+
+// DFS with pathfinding
+bool dfsPath(int graph[MAX][MAX], int n, int current, 
+             int end, int path[], int* pathLen) {
+    visited[current] = true;
+    path[(*pathLen)++] = current;
+    
+    if (current == end) {
+        return true;
+    }
+    
+    for (int i = 0; i < n; i++) {
+        if (graph[current][i] && !visited[i]) {
+            if (dfsPath(graph, n, i, end, path, pathLen)) {
+                return true;
+            }
+        }
+    }
+    
+    (*pathLen)--;  // Backtrack
+    return false;
+}`,
       python: `def dfs(graph, start, end):
     """Depth-First Search implementation"""
     visited = set()
