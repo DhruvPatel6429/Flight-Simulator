@@ -423,53 +423,108 @@ int extractMin(MinHeap* heap) {
   };
 
   return (
-    <Card className="bg-aviation-surface border-aviation-border">
-      <div className="flex items-center justify-between p-4 border-b border-aviation-border">
-        <div className="flex items-center gap-3">
-          <Code className="w-5 h-5 text-aviation-accent" />
-          <h4 className="font-bold text-aviation-text-primary">
-            Implementation: {algorithm.toUpperCase()}
-          </h4>
-          <div className="flex gap-1">
-            {['c', 'python', 'javascript'].map((lang) => (
-              <button
-                key={lang}
-                onClick={() => setSelectedLang(lang)}
-                className={`px-3 py-1 rounded text-xs font-mono font-bold transition-all ${
-                  selectedLang === lang
-                    ? 'bg-aviation-accent text-white'
-                    : 'bg-aviation-bg text-aviation-text-secondary hover:bg-aviation-surface-highlight'
-                }`}
-              >
-                {lang === 'c' ? 'C' : lang === 'python' ? 'Python' : 'JS'}
-              </button>
-            ))}
+    <div className="space-y-4">
+      {/* Why C for DSA Learning - Educational Banner */}
+      <Card className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500/50">
+        <div className="p-5">
+          <div className="flex items-center gap-3 mb-4">
+            <Award className="w-6 h-6 text-yellow-400" />
+            <h3 className="font-heading font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+              Why C Programming for Data Structures?
+            </h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="bg-aviation-bg/50 rounded-lg p-4 border border-blue-500/30">
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="w-5 h-5 text-yellow-400" />
+                <h4 className="font-bold text-aviation-text-primary">Performance & Memory Control</h4>
+              </div>
+              <p className="text-aviation-text-secondary text-xs leading-relaxed">
+                C provides direct memory management with pointers, allowing you to understand exactly how data structures are stored and manipulated in memory. This low-level control is essential for optimizing performance-critical applications.
+              </p>
+            </div>
+            
+            <div className="bg-aviation-bg/50 rounded-lg p-4 border border-purple-500/30">
+              <div className="flex items-center gap-2 mb-2">
+                <BookOpen className="w-5 h-5 text-green-400" />
+                <h4 className="font-bold text-aviation-text-primary">Academic Foundation</h4>
+              </div>
+              <p className="text-aviation-text-secondary text-xs leading-relaxed">
+                Most computer science curricula and textbooks use C for teaching DSA concepts. Learning C implementations helps you understand the fundamental principles that apply to all programming languages.
+              </p>
+            </div>
+            
+            <div className="bg-aviation-bg/50 rounded-lg p-4 border border-green-500/30">
+              <div className="flex items-center gap-2 mb-2">
+                <Target className="w-5 h-5 text-blue-400" />
+                <h4 className="font-bold text-aviation-text-primary">Industry Relevance</h4>
+              </div>
+              <p className="text-aviation-text-secondary text-xs leading-relaxed">
+                System programming, embedded systems, operating systems, and performance-critical applications are predominantly written in C. Understanding C-based DSA is crucial for careers in systems engineering and low-level programming.
+              </p>
+            </div>
+            
+            <div className="bg-aviation-bg/50 rounded-lg p-4 border border-red-500/30">
+              <div className="flex items-center gap-2 mb-2">
+                <Code className="w-5 h-5 text-purple-400" />
+                <h4 className="font-bold text-aviation-text-primary">Deep Understanding</h4>
+              </div>
+              <p className="text-aviation-text-secondary text-xs leading-relaxed">
+                C forces you to think about memory allocation, deallocation, pointer arithmetic, and manual resource management - giving you insights that high-level languages abstract away. This deep understanding makes you a better programmer overall.
+              </p>
+            </div>
+          </div>
+          
+          <div className="mt-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+            <p className="text-xs text-yellow-300 font-semibold">
+              💡 <span className="font-bold">Pro Tip:</span> Master C implementations first, and you'll find it incredibly easy to translate these concepts to Python, Java, JavaScript, or any other language!
+            </p>
           </div>
         </div>
-        <Button
-          onClick={copyCode}
-          variant="outline"
-          size="sm"
-          className="border-aviation-border"
-        >
-          {copied ? (
-            <>
-              <Check className="w-4 h-4 mr-2 text-green-500" />
-              Copied!
-            </>
-          ) : (
-            <>
-              <Copy className="w-4 h-4 mr-2" />
-              Copy
-            </>
-          )}
-        </Button>
-      </div>
-      <div className="p-4">
-        <pre className="text-xs font-mono text-aviation-text-secondary bg-aviation-bg p-4 rounded overflow-x-auto max-h-96 overflow-y-auto">
-          <code>{code}</code>
-        </pre>
-      </div>
-    </Card>
+      </Card>
+
+      {/* Code Implementation Card */}
+      <Card className="bg-aviation-surface border-aviation-border">
+        <div className="flex items-center justify-between p-4 border-b border-aviation-border">
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-500/20 p-2 rounded-lg">
+              <Code className="w-5 h-5 text-blue-400" />
+            </div>
+            <div>
+              <h4 className="font-bold text-aviation-text-primary">
+                C Implementation: {algorithm.toUpperCase()}
+              </h4>
+              <p className="text-xs text-aviation-text-secondary mt-0.5">
+                Production-grade code with proper memory management
+              </p>
+            </div>
+          </div>
+          <Button
+            onClick={copyCode}
+            variant="outline"
+            size="sm"
+            className="border-aviation-border hover:bg-aviation-surface-highlight"
+          >
+            {copied ? (
+              <>
+                <Check className="w-4 h-4 mr-2 text-green-500" />
+                Copied!
+              </>
+            ) : (
+              <>
+                <Copy className="w-4 h-4 mr-2" />
+                Copy Code
+              </>
+            )}
+          </Button>
+        </div>
+        <div className="p-4">
+          <pre className="text-xs font-mono text-aviation-text-secondary bg-aviation-bg p-4 rounded-lg overflow-x-auto max-h-96 overflow-y-auto border border-aviation-border">
+            <code className="language-c">{code}</code>
+          </pre>
+        </div>
+      </Card>
+    </div>
   );
 };
