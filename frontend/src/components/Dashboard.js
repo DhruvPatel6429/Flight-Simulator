@@ -346,7 +346,7 @@ export const Dashboard = () => {
         </div>
 
         {/* Main Tabs */}
-        <Tabs defaultValue="graph" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="bg-aviation-surface border border-aviation-border">
             <TabsTrigger value="graph" data-testid="tab-graph">Airport Network (Graph)</TabsTrigger>
             <TabsTrigger value="hash" data-testid="tab-hash">Passenger DB (Hash Table)</TabsTrigger>
