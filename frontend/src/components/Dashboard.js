@@ -770,6 +770,26 @@ export const Dashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Explore Feature Modal */}
+      {showExploreModal && (
+        <ExploreFeature 
+          onClose={() => setShowExploreModal(false)}
+          onNavigateToTab={(tabName) => {
+            const tabMap = {
+              'Graph Traversal': 'graph',
+              'Hash Table': 'hash',
+              'Boarding Queue': 'queue',
+              'Cancellation Stack': 'stack',
+              'Flight Scheduler': 'heap'
+            };
+            const tabValue = tabMap[tabName];
+            if (tabValue) {
+              setActiveTab(tabValue);
+            }
+          }}
+        />
+      )}
     </div>
   );
 };
