@@ -630,6 +630,14 @@ export const Dashboard = () => {
                 </div>
               </div>
             </Card>
+
+            {/* DSA Complexity & Code for Queue */}
+            {showDSAInfo && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <DSAComplexityTooltip dataStructure="queue" show={showDSAInfo} />
+                <CodeViewer algorithm="queue" language="c" />
+              </div>
+            )}
           </TabsContent>
 
           {/* Stack Tab */}
