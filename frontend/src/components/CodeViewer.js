@@ -107,55 +107,7 @@ bool dfsPath(int graph[MAX][MAX], int n, int current,
     (*pathLen)--;  // Backtrack
     return false;
 }`,
-      python: `def dfs(graph, start, end):
-    """Depth-First Search implementation"""
-    visited = set()
-    
-    def dfs_helper(current, path):
-        if current == end:
-            return path
-        
-        visited.add(current)
-        
-        for neighbor in graph[current]:
-            if neighbor not in visited:
-                result = dfs_helper(neighbor, path + [neighbor])
-                if result:
-                    return result
-        
-        return None
-    
-    result = dfs_helper(start, [start])
-    return result if result else []`,
-      javascript: `function dfs(graph, start, end) {
-  // Depth-First Search implementation
-  const visited = new Set();
-  
-  function dfsHelper(current, path) {
-    if (current === end) {
-      return path;
-    }
-    
-    visited.add(current);
-    
-    for (const neighbor of graph[current] || []) {
-      if (!visited.has(neighbor)) {
-        const result = dfsHelper(neighbor, [...path, neighbor]);
-        if (result) {
-          return result;
-        }
-      }
-    }
-    
-    return null;
-  }
-  
-  const result = dfsHelper(start, [start]);
-  return result || [];
-}`
-    },
-    hashtable: {
-      c: `#include <stdio.h>
+    hashtable: `#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #define TABLE_SIZE 10
