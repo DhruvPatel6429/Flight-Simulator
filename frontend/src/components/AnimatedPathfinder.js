@@ -233,120 +233,13 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
   };
 
   const animateBFS = async () => {
-    const visited = new Set([startAirport]);
-    const q = [[startAirport, [startAirport]]];
-    const visitOrder = [];
-    let foundPath = null;
-
-    while (q.length > 0) {
-      const [current, currentPath] = q.shift();
-      visitOrder.push({ node: current, queue: [...q.map(item => item[0])], path: [...currentPath] });
-
-      if (current === endAirport) {
-        foundPath = currentPath;
-        break;
-      }
-
-      const neighbors = adjacencyList[current] || [];
-      for (const neighbor of neighbors) {
-        if (!visited.has(neighbor)) {
-          visited.add(neighbor);
-          q.push([neighbor, [...currentPath, neighbor]]);
-        }
-      }
-    }
-
-    // Animate the steps
-    for (let i = 0; i < visitOrder.length && isAnimating; i++) {
-      if (isPaused) {
-        await new Promise(resolve => {
-          const checkPause = setInterval(() => {
-            if (!isPaused) {
-              clearInterval(checkPause);
-              resolve();
-            }
-          }, 100);
-        });
-      }
-
-      await new Promise(resolve => {
-        animationRef.current = setTimeout(() => {
-          setCurrentStep(i + 1);
-          setCurrentNode(visitOrder[i].node);
-          setQueue(visitOrder[i].queue);
-          setVisitedNodes(prev => [...prev, visitOrder[i].node]);
-          if (visitOrder[i].node === endAirport) {
-            setPath(visitOrder[i].path);
-            toast.success(`Path found! ${visitOrder[i].path.length - 1} hops using BFS`);
-          }
-          resolve();
-        }, ANIMATION_SPEEDS[animationSpeed]);
-      });
-    }
-
-    if (!foundPath) {
-      toast.warning('No path found between selected airports');
-    }
-    setIsAnimating(false);
+    // This function is now replaced by computeBFSSteps and animateSteps
+    // Keeping for backward compatibility but not used
   };
 
   const animateDFS = async () => {
-    const visited = new Set();
-    const visitOrder = [];
-    let foundPath = null;
-
-    const dfs = (current, currentPath) => {
-      if (foundPath) return;
-      
-      visited.add(current);
-      visitOrder.push({ node: current, path: [...currentPath] });
-
-      if (current === endAirport) {
-        foundPath = currentPath;
-        return;
-      }
-
-      const neighbors = adjacencyList[current] || [];
-      for (const neighbor of neighbors) {
-        if (!visited.has(neighbor)) {
-          dfs(neighbor, [...currentPath, neighbor]);
-        }
-      }
-    };
-
-    dfs(startAirport, [startAirport]);
-
-    // Animate the steps
-    for (let i = 0; i < visitOrder.length && isAnimating; i++) {
-      if (isPaused) {
-        await new Promise(resolve => {
-          const checkPause = setInterval(() => {
-            if (!isPaused) {
-              clearInterval(checkPause);
-              resolve();
-            }
-          }, 100);
-        });
-      }
-
-      await new Promise(resolve => {
-        animationRef.current = setTimeout(() => {
-          setCurrentStep(i + 1);
-          setCurrentNode(visitOrder[i].node);
-          setVisitedNodes(prev => [...prev, visitOrder[i].node]);
-          if (visitOrder[i].node === endAirport) {
-            setPath(visitOrder[i].path);
-            toast.success(`Path found! ${visitOrder[i].path.length - 1} hops using DFS`);
-          }
-          resolve();
-        }, ANIMATION_SPEEDS[animationSpeed]);
-      });
-    }
-
-    if (!foundPath) {
-      toast.warning('No path found between selected airports');
-    }
-    setIsAnimating(false);
+    // This function is now replaced by computeDFSSteps and animateSteps
+    // Keeping for backward compatibility but not used
   };
 
   return (
