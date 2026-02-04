@@ -204,11 +204,14 @@ backend:
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
         comment: "API endpoint for dynamic resizing with rehashing animation data. Returns old table, new table, and movement tracking for visualization."
+      - working: true
+        agent: "testing"
+        comment: "✅ REHASHING API FULLY FUNCTIONAL - Tested rehash operations 10→20 and 20→40. Old/new table sizes correct, movement tracking working (18 movements recorded), load factor calculations accurate (1.8→0.9 for 10→20 rehash). All rehash animation data properly structured."
 
   - task: "Advanced Heap APIs (Min/Max/Dual/Heapify)"
     implemented: true
