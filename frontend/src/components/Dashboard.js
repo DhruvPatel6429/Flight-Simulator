@@ -528,6 +528,7 @@ export const Dashboard = () => {
                     passengers={passengers}
                     animationSpeed={animationSpeed}
                     showSteps={showDSAInfo}
+                    stepMode={stepMode}
                   />
                 </div>
 
