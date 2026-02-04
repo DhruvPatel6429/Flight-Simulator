@@ -308,9 +308,9 @@ export const AdvancedHashTableVisualization = ({
           <div className="flex items-end">
             <Button
               onClick={handleRehash}
-              disabled={isRehashing || !hashData.needs_resize}
+              disabled={isRehashing}
               className="w-full"
-              variant={hashData.needs_resize ? "default" : "outline"}
+              variant="default"
             >
               {isRehashing ? 'Rehashing...' : 'Trigger Rehash'}
             </Button>
