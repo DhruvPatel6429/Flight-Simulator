@@ -136,87 +136,134 @@ export const AdvancedHeapVisualization = ({
       }
     }
 
-    const typeColor = type === 'min' ? 'border-blue-500' : 'border-red-500';
-    const typeBg = type === 'min' ? 'bg-blue-500/20' : 'bg-red-500/20';
-    const typeText = type === 'min' ? 'text-blue-400' : 'text-red-400';
-    const lineColor = type === 'min' ? 'stroke-blue-500' : 'stroke-red-500';
+    const typeColor = type === 'min' ? 'border-blue-400' : 'border-red-400';
+    const typeBg = type === 'min' ? 'bg-gradient-to-br from-blue-500/30 to-blue-600/20' : 'bg-gradient-to-br from-red-500/30 to-red-600/20';
+    const typeText = type === 'min' ? 'text-blue-300' : 'text-red-300';
+    const lineGradient = type === 'min' ? 'url(#blueGradient)' : 'url(#redGradient)';
+    const glowColor = type === 'min' ? 'rgba(59, 130, 246, 0.5)' : 'rgba(239, 68, 68, 0.5)';
 
-    // Calculate node positions for SVG lines
-    const nodeWidth = 120;
-    const nodeHeight = 80;
-    const levelGap = 100;
-    const svgHeight = maxLevels * levelGap + nodeHeight;
-    const svgWidth = Math.pow(2, maxLevels - 1) * nodeWidth + 200;
+    // Enhanced layout with better spacing
+    const nodeWidth = 140;
+    const nodeHeight = 90;
+    const baseHorizontalSpacing = 180;
+    const verticalSpacing = 140;
+    const svgHeight = maxLevels * verticalSpacing + nodeHeight + 100;
+    const svgWidth = Math.pow(2, maxLevels - 1) * baseHorizontalSpacing + 300;
 
     const getNodePosition = (level, posInLevel, nodesInLevel) => {
-      const levelWidth = svgWidth;
-      const spacing = levelWidth / (nodesInLevel + 1);
+      const totalWidth = svgWidth - 300;
+      const spacingForLevel = totalWidth / Math.pow(2, level);
+      const offset = spacingForLevel / 2;
       return {
-        x: spacing * (posInLevel + 1),
-        y: level * levelGap + 50
+        x: offset + (posInLevel * spacingForLevel) + 150,
+        y: level * verticalSpacing + 80
       };
     };
 
-    // Generate SVG lines
-    const lines = [];
+    // Generate curved SVG paths with better styling
+    const connections = [];
     levels.forEach((level, levelIdx) => {
       level.forEach(({ index }, posInLevel) => {
         const leftChildIdx = 2 * index + 1;
         const rightChildIdx = 2 * index + 2;
         
-        if (leftChildIdx < flights.length) {
-          const parentPos = getNodePosition(levelIdx, posInLevel, level.length);
-          const nextLevel = levels[levelIdx + 1];
-          if (nextLevel) {
-            const childPosInLevel = nextLevel.findIndex(n => n.index === leftChildIdx);
-            if (childPosInLevel !== -1) {
-              const childPos = getNodePosition(levelIdx + 1, childPosInLevel, nextLevel.length);
-              lines.push({ x1: parentPos.x, y1: parentPos.y + nodeHeight/2, x2: childPos.x, y2: childPos.y - nodeHeight/2, type: 'left' });
-            }
+        const parentPos = getNodePosition(levelIdx, posInLevel, level.length);
+        const nextLevel = levels[levelIdx + 1];
+        
+        if (leftChildIdx < flights.length && nextLevel) {
+          const childPosInLevel = nextLevel.findIndex(n => n.index === leftChildIdx);
+          if (childPosInLevel !== -1) {
+            const childPos = getNodePosition(levelIdx + 1, childPosInLevel, nextLevel.length);
+            const midY = (parentPos.y + childPos.y) / 2;
+            const curve = Math.abs(parentPos.x - childPos.x) * 0.3;
+            const path = `M ${parentPos.x} ${parentPos.y + nodeHeight/2} 
+                         Q ${parentPos.x - curve} ${midY}, ${childPos.x} ${childPos.y - nodeHeight/2}`;
+            connections.push({ path, type: 'left', highlighted: highlightedIndices.includes(index) || highlightedIndices.includes(leftChildIdx) });
           }
         }
         
-        if (rightChildIdx < flights.length) {
-          const parentPos = getNodePosition(levelIdx, posInLevel, level.length);
-          const nextLevel = levels[levelIdx + 1];
-          if (nextLevel) {
-            const childPosInLevel = nextLevel.findIndex(n => n.index === rightChildIdx);
-            if (childPosInLevel !== -1) {
-              const childPos = getNodePosition(levelIdx + 1, childPosInLevel, nextLevel.length);
-              lines.push({ x1: parentPos.x, y1: parentPos.y + nodeHeight/2, x2: childPos.x, y2: childPos.y - nodeHeight/2, type: 'right' });
-            }
+        if (rightChildIdx < flights.length && nextLevel) {
+          const childPosInLevel = nextLevel.findIndex(n => n.index === rightChildIdx);
+          if (childPosInLevel !== -1) {
+            const childPos = getNodePosition(levelIdx + 1, childPosInLevel, nextLevel.length);
+            const midY = (parentPos.y + childPos.y) / 2;
+            const curve = Math.abs(parentPos.x - childPos.x) * 0.3;
+            const path = `M ${parentPos.x} ${parentPos.y + nodeHeight/2} 
+                         Q ${parentPos.x + curve} ${midY}, ${childPos.x} ${childPos.y - nodeHeight/2}`;
+            connections.push({ path, type: 'right', highlighted: highlightedIndices.includes(index) || highlightedIndices.includes(rightChildIdx) });
           }
         }
       });
     });
 
     return (
-      <div className="relative overflow-x-auto py-8">
-        {/* SVG for connection lines */}
+      <div className="relative overflow-x-auto py-12 px-8">
+        {/* Enhanced SVG with gradients and better lines */}
         <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" style={{ height: svgHeight }}>
-          {lines.map((line, idx) => (
-            <line
-              key={idx}
-              x1={line.x1}
-              y1={line.y1}
-              x2={line.x2}
-              y2={line.y2}
-              className={lineColor}
-              strokeWidth="2"
-              opacity="0.6"
-            />
+          <defs>
+            {/* Gradient definitions */}
+            <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.6" />
+            </linearGradient>
+            <linearGradient id="redGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#ef4444" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#b91c1c" stopOpacity="0.6" />
+            </linearGradient>
+            {/* Shadow filter */}
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+              <feOffset dx="0" dy="2" result="offsetblur"/>
+              <feComponentTransfer>
+                <feFuncA type="linear" slope="0.3"/>
+              </feComponentTransfer>
+              <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          
+          {/* Draw connection lines with curves */}
+          {connections.map((conn, idx) => (
+            <g key={idx}>
+              {/* Glow effect for highlighted connections */}
+              {conn.highlighted && (
+                <path
+                  d={conn.path}
+                  stroke="#fbbf24"
+                  strokeWidth="6"
+                  fill="none"
+                  opacity="0.4"
+                  filter="url(#shadow)"
+                />
+              )}
+              {/* Main connection line */}
+              <path
+                d={conn.path}
+                stroke={conn.highlighted ? '#fbbf24' : lineGradient}
+                strokeWidth={conn.highlighted ? "4" : "3"}
+                fill="none"
+                opacity={conn.highlighted ? "1" : "0.7"}
+                strokeLinecap="round"
+                style={{
+                  transition: 'all 0.3s ease',
+                  filter: conn.highlighted ? `drop-shadow(0 0 8px ${glowColor})` : 'none'
+                }}
+              />
+            </g>
           ))}
         </svg>
         
-        {/* Nodes */}
-        <div className="relative space-y-12" style={{ minHeight: svgHeight }}>
+        {/* Enhanced Nodes with better styling */}
+        <div className="relative" style={{ minHeight: svgHeight }}>
           {levels.map((level, levelIdx) => {
             const positions = level.map((_, posInLevel) => 
               getNodePosition(levelIdx, posInLevel, level.length)
             );
             
             return (
-              <div key={levelIdx} className="relative flex justify-center items-center" style={{ height: nodeHeight }}>
+              <div key={levelIdx} className="absolute w-full" style={{ top: `${levelIdx * verticalSpacing + 80}px` }}>
                 {level.map(({ flight, index }, posInLevel) => {
                   const isHighlighted = highlightedIndices.includes(index);
                   const isRoot = index === 0;
@@ -225,31 +272,47 @@ export const AdvancedHeapVisualization = ({
                   return (
                     <div 
                       key={index} 
-                      className="absolute"
+                      className="absolute transition-all duration-300 ease-in-out"
                       style={{ 
                         left: `${position.x}px`, 
-                        transform: 'translateX(-50%)'
+                        transform: `translateX(-50%) ${isHighlighted ? 'scale(1.15)' : 'scale(1)'}`
                       }}
                     >
-                      <div className={`relative border-2 rounded-lg p-3 transition-all ${
-                        isHighlighted ? 'bg-yellow-500/30 border-yellow-500 scale-110 shadow-xl' :
-                        isRoot ? `${typeBg} ${typeColor} shadow-lg` :
-                        `bg-aviation-surface ${typeColor} shadow-md`
-                      }`} style={{ width: nodeWidth - 20 }}>
-                        <div className="text-xs font-mono font-bold text-aviation-text-primary text-center">
+                      <div className={`relative border-3 rounded-xl p-4 transition-all duration-300 ${
+                        isHighlighted ? 'bg-gradient-to-br from-yellow-500/40 to-amber-600/30 border-yellow-400 shadow-2xl' :
+                        isRoot ? `${typeBg} ${typeColor} shadow-xl ring-2 ring-offset-2 ring-offset-aviation-bg ${type === 'min' ? 'ring-blue-400/50' : 'ring-red-400/50'}` :
+                        `bg-gradient-to-br ${type === 'min' ? 'from-aviation-surface to-blue-900/20' : 'from-aviation-surface to-red-900/20'} ${typeColor} shadow-lg hover:shadow-xl`
+                      }`} 
+                      style={{ 
+                        width: nodeWidth - 20,
+                        boxShadow: isHighlighted 
+                          ? `0 0 30px ${type === 'min' ? 'rgba(251, 191, 36, 0.6)' : 'rgba(251, 191, 36, 0.6)'}, 0 10px 25px rgba(0,0,0,0.3)` 
+                          : isRoot
+                          ? `0 0 20px ${glowColor}, 0 8px 20px rgba(0,0,0,0.3)`
+                          : '0 4px 12px rgba(0,0,0,0.2)'
+                      }}>
+                        {/* Flight Info */}
+                        <div className="text-sm font-mono font-bold text-aviation-text-primary text-center mb-1">
                           {flight.flight_id}
                         </div>
-                        <div className={`text-xs font-mono ${typeText} text-center`}>
+                        <div className={`text-xs font-mono ${typeText} text-center font-semibold`}>
                           {flight.departure_time}
                         </div>
-                        <div className="text-xs text-aviation-text-secondary mt-1 text-center">
-                          [{index}]
+                        <div className={`text-xs ${type === 'min' ? 'text-blue-400/70' : 'text-red-400/70'} mt-2 text-center font-mono`}>
+                          Index: [{index}]
                         </div>
+                        
+                        {/* Root badge */}
                         {isRoot && (
-                          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black text-xs px-2 py-0.5 rounded font-bold whitespace-nowrap">
+                          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-amber-500 text-black text-xs px-3 py-1 rounded-full font-bold whitespace-nowrap shadow-lg">
                             {type === 'min' ? '⏰ Next Flight' : '📅 Latest Flight'}
                           </div>
                         )}
+                        
+                        {/* Level indicator */}
+                        <div className={`absolute -top-2 -right-2 ${type === 'min' ? 'bg-blue-500' : 'bg-red-500'} text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold shadow-md`}>
+                          L{levelIdx}
+                        </div>
                       </div>
                     </div>
                   );
