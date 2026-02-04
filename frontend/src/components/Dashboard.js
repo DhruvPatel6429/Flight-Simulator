@@ -503,15 +503,14 @@ export const Dashboard = () => {
 
           {/* Hash Table Tab */}
           <TabsContent value="hash" className="space-y-4">
-            <Card className="bg-aviation-surface border-aviation-border p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-2xl font-heading font-bold text-aviation-text-primary">Passenger Database</h2>
-                  <p className="text-sm text-aviation-text-secondary font-mono">Hash Table with Separate Chaining for collision handling</p>
-                </div>
-                <Button onClick={() => exportVisualization('hash-section', 'hash-table')} size="sm" data-testid="btn-export-hash">
-                  Export PNG
-                </Button>
+            {/* New Passenger Database View */}
+            <PassengerDatabaseView />
+
+            {/* Advanced Hash Table Visualization - Below */}
+            <Card className="bg-aviation-surface border-aviation-border p-6 mt-6">
+              <div className="mb-4">
+                <h2 className="text-2xl font-heading font-bold text-aviation-text-primary">Advanced Hash Table Analysis</h2>
+                <p className="text-sm text-aviation-text-secondary font-mono">Compare collision resolution methods and analyze performance</p>
               </div>
 
               {showDSAInfo && (
