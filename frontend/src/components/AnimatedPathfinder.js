@@ -147,6 +147,91 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
     await animateSteps(steps);
   };
 
+  const computeBFSSteps = () => {
+    const visited = new Set([startAirport]);
+    const q = [[startAirport, [startAirport]]];
+    const visitOrder = [];
+    let foundPath = null;
+
+    while (q.length > 0) {
+      const [current, currentPath] = q.shift();
+      visitOrder.push({ node: current, queue: [...q.map(item => item[0])], path: [...currentPath] });
+
+      if (current === endAirport) {
+        foundPath = currentPath;
+        break;
+      }
+
+      const neighbors = adjacencyList[current] || [];
+      for (const neighbor of neighbors) {
+        if (!visited.has(neighbor)) {
+          visited.add(neighbor);
+          q.push([neighbor, [...currentPath, neighbor]]);
+        }
+      }
+    }
+
+    return visitOrder;
+  };
+
+  const computeDFSSteps = () => {
+    const visited = new Set();
+    const visitOrder = [];
+    let foundPath = null;
+
+    const dfs = (current, currentPath) => {
+      if (foundPath) return;
+      
+      visited.add(current);
+      visitOrder.push({ node: current, path: [...currentPath] });
+
+      if (current === endAirport) {
+        foundPath = currentPath;
+        return;
+      }
+
+      const neighbors = adjacencyList[current] || [];
+      for (const neighbor of neighbors) {
+        if (!visited.has(neighbor)) {
+          dfs(neighbor, [...currentPath, neighbor]);
+        }
+      }
+    };
+
+    dfs(startAirport, [startAirport]);
+    return visitOrder;
+  };
+
+  const animateSteps = async (steps) => {
+    for (let i = 0; i < steps.length; i++) {
+      if (!isAnimatingRef.current) break;
+
+      // Wait if paused
+      while (isPausedRef.current && isAnimatingRef.current) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      if (!isAnimatingRef.current) break;
+
+      await new Promise(resolve => {
+        animationRef.current = setTimeout(() => {
+          setCurrentStepIndex(i);
+          setCurrentStep(i + 1);
+          setCurrentNode(steps[i].node);
+          setQueue(steps[i].queue || []);
+          setVisitedNodes(steps.slice(0, i + 1).map(s => s.node));
+          if (steps[i].node === endAirport) {
+            setPath(steps[i].path);
+            toast.success(`Path found! ${steps[i].path.length - 1} hops using ${algorithm.toUpperCase()}`);
+          }
+          resolve();
+        }, ANIMATION_SPEEDS[animationSpeed]);
+      });
+    }
+
+    setIsAnimating(false);
+  };
+
   const animateBFS = async () => {
     const visited = new Set([startAirport]);
     const q = [[startAirport, [startAirport]]];
