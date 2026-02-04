@@ -701,19 +701,18 @@ export const Dashboard = () => {
 
               {showDSAInfo && (
                 <div className="mb-4 p-4 bg-aviation-bg border border-dsa-heap rounded-lg">
-                  <h3 className="font-heading font-bold text-dsa-heap mb-2">Data Structure: Min Heap (Priority Queue)</h3>
-                  <p className="text-sm text-aviation-text-secondary mb-2">Binary tree where parent node has earlier departure time than children.</p>
+                  <h3 className="font-heading font-bold text-dsa-heap mb-2">Data Structure: Heap (Advanced)</h3>
+                  <p className="text-sm text-aviation-text-secondary mb-2">Binary tree with min/max heap property, heapify animation, and dual heap comparison.</p>
                   <div className="text-xs font-mono text-aviation-text-secondary">
-                    <div>• Insert: O(log n)</div>
-                    <div>• Extract Min: O(log n)</div>
-                    <div>• Heapify: O(n)</div>
+                    <div>• Min Heap: Parent ≤ Children (Earliest flights at root)</div>
+                    <div>• Max Heap: Parent ≥ Children (Latest flights at root)</div>
+                    <div>• Heapify Process: Build heap in O(n) time</div>
                   </div>
                 </div>
               )}
 
               <div id="heap-section" className="bg-aviation-bg border border-aviation-border rounded-lg p-6">
-                <EnhancedHeapVisualization 
-                  flights={flights}
+                <AdvancedHeapVisualization 
                   animationSpeed={animationSpeed}
                   showSteps={showDSAInfo}
                   showArrayRepresentation={true}
