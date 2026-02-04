@@ -11,6 +11,7 @@ import {
   Users, 
   ListOrdered, 
   TrendingUp,
+  TrendingDown,
   BookOpen,
   CheckCircle,
   ArrowRight
