@@ -593,7 +593,7 @@ export const Dashboard = () => {
             {showDSAInfo && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <DSAComplexityTooltip dataStructure="hashtable" show={showDSAInfo} />
-                <CodeViewer algorithm="hashtable" language="python" />
+                <CodeViewer algorithm="hashtable" language="c" />
               </div>
             )}
           </TabsContent>
