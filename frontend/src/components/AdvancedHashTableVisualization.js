@@ -338,7 +338,7 @@ export const AdvancedHashTableVisualization = ({
       </div>
 
       {/* Statistics Panel */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <Card className="bg-aviation-surface border-aviation-border p-4">
           <div className="text-xs text-aviation-text-secondary mb-1">Load Factor (α)</div>
           <div className={`text-2xl font-bold font-mono ${getLoadFactorColor(hashData.load_factor)}`}>
@@ -363,26 +363,6 @@ export const AdvancedHashTableVisualization = ({
             {hashData.table_size}
           </div>
           <div className="text-xs text-aviation-text-secondary mt-1">Bucket count</div>
-        </Card>
-
-        <Card className={`border p-4 ${hashData.needs_resize ? 'bg-red-500/10 border-red-500' : 'bg-green-500/10 border-green-500'}`}>
-          <div className="text-xs mb-1">Resize Status</div>
-          <div className="text-2xl font-bold">
-            {hashData.needs_resize ? (
-              <div className="flex items-center gap-2 text-red-500">
-                <AlertTriangle className="w-6 h-6" />
-                <span>Needed</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-green-500">
-                <Zap className="w-6 h-6" />
-                <span>Good</span>
-              </div>
-            )}
-          </div>
-          <div className="text-xs mt-1">
-            {hashData.needs_resize ? 'α > 0.75' : 'α ≤ 0.75'}
-          </div>
         </Card>
       </div>
 
