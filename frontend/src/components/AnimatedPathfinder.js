@@ -116,13 +116,35 @@ export const AnimatedPathfinder = ({ airports, flights, animationSpeed = 'normal
     }
 
     resetAnimation();
+    
+    // Compute all steps first
+    const steps = algorithm === 'bfs' ? computeBFSSteps() : computeDFSSteps();
+    setAllSteps(steps);
+    
+    if (steps.length === 0) {
+      toast.warning('No path found between selected airports');
+      return;
+    }
+
     setIsAnimating(true);
 
-    if (algorithm === 'bfs') {
-      await animateBFS();
-    } else {
-      await animateDFS();
+    // If step mode, just show first step
+    if (stepMode) {
+      const firstStep = steps[0];
+      setCurrentStepIndex(0);
+      setCurrentStep(1);
+      setCurrentNode(firstStep.node);
+      setQueue(firstStep.queue || []);
+      setVisitedNodes([firstStep.node]);
+      if (firstStep.node === endAirport) {
+        setPath(firstStep.path);
+        toast.success(`Path found! ${firstStep.path.length - 1} hops using ${algorithm.toUpperCase()}`);
+      }
+      return;
     }
+
+    // Otherwise animate automatically
+    await animateSteps(steps);
   };
 
   const animateBFS = async () => {
