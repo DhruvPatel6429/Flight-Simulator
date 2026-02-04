@@ -187,7 +187,7 @@ backend:
 frontend:
   - task: "Enhanced Graph Visualization with BFS/DFS Traversal"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/components/EnhancedGraphVisualization.js"
     stuck_count: 0
     priority: "high"
@@ -196,6 +196,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Implemented animated graph with BFS/DFS traversal, node highlighting, edge animations, and adjacency list display. Needs UI testing."
+      - working: true
+        agent: "main"
+        comment: "Added stepMode prop support for step-by-step execution control."
 
   - task: "Enhanced Hash Table with Status Colors & Collision Visualization"
     implemented: true
