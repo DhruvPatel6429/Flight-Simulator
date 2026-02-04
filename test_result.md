@@ -381,13 +381,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Backend API endpoints for all data structures"
-    - "Enhanced Graph Visualization with BFS/DFS"
-    - "Enhanced Hash Table with status colors"
-    - "Enhanced Circular Queue visualization"
-    - "Enhanced Stack visualization"
-    - "Enhanced Heap with array representation"
-    - "Operation Control Panel functionality"
+    - "Advanced Hash Table API with Multiple Collision Methods"
+    - "Hash Table Dynamic Resizing/Rehashing API"
+    - "Advanced Heap APIs (Min/Max/Dual/Heapify)"
+    - "Advanced Hash Table Visualization with Collision Comparison"
+    - "Advanced Heap Visualization with Min/Max Dual View"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -395,19 +393,60 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: |
-      Enhanced all DSA visualizations with professional animations and educational features:
+      ✅ COMPLETED MAJOR ENHANCEMENTS (AnimatedPathfinder Removal + Advanced Features):
       
-      ✅ COMPLETED ENHANCEMENTS:
-      1. Graph Visualization - Added BFS/DFS traversal animations, node highlighting, edge animations
-      2. Hash Table - Implemented status color coding (Pending/Boarded/Cancelled), collision visualization
-      3. Circular Queue - Created circular array layout with front/rear pointers and wraparound
-      4. Stack - Enhanced with vertical layout, push/pop animations, and top pointer
-      5. Heap - Added binary tree visualization, "Next Flight" indicator, and array representation
-      6. Operation Control Panel - Animation speed control, educational mode toggle, status legend
+      🗑️ REMOVED:
+      - AnimatedPathfinder.js component (as requested)
+      - All AnimatedPathfinder references from Dashboard
+      - Kept PathfindingVisualizer.js intact
+      
+      ✨ NEW BACKEND APIs:
+      1. Advanced Hash Table API:
+         - Multiple collision methods: separate_chaining, linear_probing, quadratic_probing, double_hashing
+         - Load factor calculation (α = n/m)
+         - Collision counting for each method
+         - Performance metrics
+      
+      2. Hash Table Rehashing API:
+         - Dynamic resizing simulation
+         - Movement tracking for animation
+         - Old/new table comparison
+         - Load factor before/after
+      
+      3. Advanced Heap APIs:
+         - Min/Max heap support
+         - Dual heap comparison endpoint
+         - Heapify step-by-step process
+         - Array representation data
+      
+      🎨 NEW FRONTEND COMPONENTS:
+      1. AdvancedHashTableVisualization.js:
+         - Collision method selector (4 methods)
+         - Dynamic table size adjustment
+         - Load factor meter with color coding (green/yellow/red)
+         - Trigger rehash button (active when α > 0.75)
+         - Side-by-side method comparison
+         - Separate chaining: linked list visualization
+         - Open addressing: grid layout with probe sequences
+         - Real-time statistics dashboard
+         - Collision heat map
+      
+      2. AdvancedHeapVisualization.js:
+         - Min/Max heap toggle
+         - Dual heap side-by-side view
+         - Binary tree visualization with levels
+         - Array representation with parent/child indices
+         - Heapify animation controls (Play/Pause/Next/Previous)
+         - Step-by-step heapify process
+         - Highlighted nodes during swaps
+         - Root node special indicator (Next/Latest Flight)
+         - Educational complexity tooltips
       
       🎯 READY FOR TESTING:
-      - Backend APIs need comprehensive testing via curl
-      - Frontend UI needs testing with Playwright to verify all animations and interactions
-      - All components support animation speed control (Slow/Normal/Fast)
-      - Educational mode toggle shows/hides DSA complexity information
-      - Status colors properly reflect passenger states throughout the system
+      - Backend APIs tested via curl - all working ✅
+      - Frontend compiling successfully ✅
+      - Services running smoothly ✅
+      - Need comprehensive UI testing for new visualizations
+      - Need to verify all animation controls work properly
+      - Need to test collision method comparisons
+      - Need to test heapify step-by-step animations
