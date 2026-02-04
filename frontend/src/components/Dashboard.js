@@ -377,6 +377,7 @@ export const Dashboard = () => {
                     onNodeClick={setSelectedNode}
                     animationSpeed={animationSpeed}
                     showSteps={showDSAInfo}
+                    stepMode={stepMode}
                   />
                 </div>
                 
