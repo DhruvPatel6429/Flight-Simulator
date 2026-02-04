@@ -708,7 +708,7 @@ export const Dashboard = () => {
             {showDSAInfo && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <DSAComplexityTooltip dataStructure="stack" show={showDSAInfo} />
-                <CodeViewer algorithm="stack" language="c" />
+                <CodeViewer algorithm="stack" />
               </div>
             )}
           </TabsContent>
