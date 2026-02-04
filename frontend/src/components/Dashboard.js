@@ -635,7 +635,7 @@ export const Dashboard = () => {
             {showDSAInfo && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <DSAComplexityTooltip dataStructure="queue" show={showDSAInfo} />
-                <CodeViewer algorithm="queue" language="c" />
+                <CodeViewer algorithm="queue" />
               </div>
             )}
           </TabsContent>
